@@ -1,0 +1,31 @@
+## .NET Build Artifacts
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+## Publish Output
+publish/
+
+## NuGet
+*.nupkg
+.nuget/
+
+## macOS
+.DS_Store
+
+## Rider/VS
+*.DotSettings.user
+
+## Local Database (don't commit user data)
+*.db
+*.db-shm
+*.db-wal
+
+## Logs
+*.log
+
+## Secrets (license keys etc. - keep private)
+*Secret*
+*secret*

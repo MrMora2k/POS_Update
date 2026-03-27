@@ -1,0 +1,265 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <!-- App Info -->
+    <s:String x:Key="AppName">ApliqX-POS</s:String>
+    <s:String x:Key="AppTitle">ApliqX-POS - نقطة البيع</s:String>
+    <s:String x:Key="AppDescription">نظام نقاط البيع الاحترافي</s:String>
+
+    <!-- Navigation -->
+    <s:String x:Key="Nav_Dashboard">لوحة التحكم</s:String>
+    <s:String x:Key="Nav_POS">نقطة البيع</s:String>
+    <s:String x:Key="Nav_Inventory">المخزون</s:String>
+    <s:String x:Key="Nav_Products">المنتجات</s:String>
+    <s:String x:Key="Nav_Categories">التصنيفات</s:String>
+    <s:String x:Key="Categories_Title">التصنيفات</s:String>
+    <s:String x:Key="Categories_AddCategory">إضافة تصنيف</s:String>
+    <s:String x:Key="Categories_EditCategory">تعديل التصنيف</s:String>
+    <s:String x:Key="Categories_CategoryName">اسم التصنيف</s:String>
+    <s:String x:Key="Categories_Icon">الأيقونة</s:String>
+    <s:String x:Key="Nav_Customers">الزبائن</s:String>
+    <s:String x:Key="Nav_Debts">الديون</s:String>
+    <s:String x:Key="Nav_Sales">المبيعات</s:String>
+    <s:String x:Key="Nav_Reports">التقارير</s:String>
+    <s:String x:Key="Nav_Settings">الإعدادات</s:String>
+
+    <!-- Common Actions -->
+    <s:String x:Key="Action_Save">حفظ</s:String>
+    <s:String x:Key="Action_Cancel">إلغاء</s:String>
+    <s:String x:Key="Action_Delete">حذف</s:String>
+    <s:String x:Key="Action_Edit">تعديل</s:String>
+    <s:String x:Key="Action_Add">إضافة</s:String>
+    <s:String x:Key="Action_Search">بحث</s:String>
+    <s:String x:Key="Action_Print">طباعة</s:String>
+    <s:String x:Key="Action_Export">تصدير</s:String>
+    <s:String x:Key="Action_Refresh">تحديث</s:String>
+    <s:String x:Key="Action_Close">إغلاق</s:String>
+
+    <!-- Common Labels -->
+    <s:String x:Key="Label_Name">الاسم</s:String>
+    <s:String x:Key="Label_Price">السعر</s:String>
+    <s:String x:Key="Label_Quantity">الكمية</s:String>
+    <s:String x:Key="Label_Total">المجموع</s:String>
+    <s:String x:Key="Label_Subtotal">المجموع الفرعي</s:String>
+    <s:String x:Key="Label_Discount">الخصم</s:String>
+    <s:String x:Key="Label_Tax">الضريبة</s:String>
+    <s:String x:Key="Label_Date">التاريخ</s:String>
+    <s:String x:Key="Label_Phone">الهاتف</s:String>
+    <s:String x:Key="Label_Address">العنوان</s:String>
+    <s:String x:Key="Label_Notes">ملاحظات</s:String>
+    <s:String x:Key="Label_Description">الوصف</s:String>
+    <s:String x:Key="Label_Status">الحالة</s:String>
+    <s:String x:Key="Label_Amount">المبلغ</s:String>
+    <s:String x:Key="Label_Balance">الرصيد</s:String>
+    <s:String x:Key="Label_Paid">المدفوع</s:String>
+    <s:String x:Key="Label_Remaining">المتبقي</s:String>
+
+    <!-- Currency -->
+    <s:String x:Key="Currency_IQD">دينار عراقي</s:String>
+    <s:String x:Key="Currency_IQD_Symbol">د.ع</s:String>
+    <s:String x:Key="Currency_USD">دولار أمريكي</s:String>
+    <s:String x:Key="Currency_USD_Symbol">$</s:String>
+
+    <!-- POS -->
+    <s:String x:Key="POS_Checkout">الدفع</s:String>
+    <s:String x:Key="POS_Cart">السلة</s:String>
+    <s:String x:Key="POS_EmptyCart">السلة فارغة</s:String>
+    <s:String x:Key="POS_AddProduct">إضافة منتج</s:String>
+    <s:String x:Key="POS_ScanBarcode">مسح الباركود</s:String>
+    <s:String x:Key="POS_PaymentMethod">طريقة الدفع</s:String>
+    <s:String x:Key="POS_Cash">نقدي</s:String>
+    <s:String x:Key="POS_Card">بطاقة</s:String>
+    <s:String x:Key="POS_Debt">دين</s:String>
+    <s:String x:Key="POS_CompleteSale">إتمام البيع</s:String>
+    <s:String x:Key="POS_OpenDrawer">فتح الدرج</s:String>
+    <s:String x:Key="Cart">السلة</s:String>
+    <s:String x:Key="CartEmpty">السلة فارغة</s:String>
+    <s:String x:Key="ClearCart">تفريغ السلة</s:String>
+    <s:String x:Key="Checkout">الدفع</s:String>
+    <s:String x:Key="Subtotal">المجموع الفرعي</s:String>
+    <s:String x:Key="Discount">الخصم</s:String>
+    <s:String x:Key="Total">المجموع</s:String>
+    <s:String x:Key="Search_Products">البحث عن منتج...</s:String>
+    <s:String x:Key="NoProducts">لا توجد منتجات</s:String>
+    <s:String x:Key="Product_Stock">المخزون</s:String>
+    <s:String x:Key="Customer">زبون</s:String>
+
+    <!-- Customers -->
+    <s:String x:Key="Customer_NewCustomer">زبون جديد</s:String>
+    <s:String x:Key="Customer_EditCustomer">تعديل الزبون</s:String>
+    <s:String x:Key="Customer_WalkIn">زبون عابر</s:String>
+    <s:String x:Key="Customer_DebtLimit">حد الدين</s:String>
+    <s:String x:Key="Customer_CurrentDebt">الدين الحالي</s:String>
+    <s:String x:Key="Customer_PayDebt">تسديد الدين</s:String>
+    <s:String x:Key="Customer_DebtHistory">سجل الديون</s:String>
+
+    <!-- Inventory -->
+    <s:String x:Key="Inventory_Stock">المخزون</s:String>
+    <s:String x:Key="Inventory_LowStock">مخزون منخفض</s:String>
+    <s:String x:Key="Inventory_OutOfStock">نفاد المخزون</s:String>
+    <s:String x:Key="Inventory_MinStock">الحد الأدنى للمخزون</s:String>
+    <s:String x:Key="Inventory_AddStock">إضافة مخزون</s:String>
+    <s:String x:Key="Inventory_AdjustStock">تعديل المخزون</s:String>
+
+    <!-- Products -->
+    <s:String x:Key="Product_Barcode">الباركود</s:String>
+    <s:String x:Key="Product_Category">التصنيف</s:String>
+    <s:String x:Key="Product_CostPrice">سعر الشراء</s:String>
+    <s:String x:Key="Product_SalePrice">سعر البيع</s:String>
+    <s:String x:Key="Product_NewProduct">منتج جديد</s:String>
+    <s:String x:Key="Product_EditProduct">تعديل المنتج</s:String>
+
+    <!-- Reports -->
+    <s:String x:Key="Report_Daily">تقرير يومي</s:String>
+    <s:String x:Key="Report_Weekly">تقرير أسبوعي</s:String>
+    <s:String x:Key="Report_Monthly">تقرير شهري</s:String>
+    <s:String x:Key="Report_TotalSales">إجمالي المبيعات</s:String>
+    <s:String x:Key="Report_TotalProfit">إجمالي الأرباح</s:String>
+    <s:String x:Key="Report_TotalExpenses">إجمالي المصروفات</s:String>
+
+    <!-- Settings -->
+    <s:String x:Key="Settings_General">عام</s:String>
+    <s:String x:Key="Settings_Appearance">المظهر</s:String>
+    <s:String x:Key="Settings_Language">اللغة</s:String>
+    <s:String x:Key="Settings_Theme">السمة</s:String>
+    <s:String x:Key="Settings_DarkMode">الوضع الداكن</s:String>
+    <s:String x:Key="Settings_LightMode">الوضع الفاتح</s:String>
+
+    <s:String x:Key="Settings_Printer">الطابعة</s:String>
+    <s:String x:Key="Settings_Shop">إعدادات المتجر</s:String>
+    <s:String x:Key="Settings_RestaurantMode">وضع المطعم</s:String>
+    <s:String x:Key="Settings_ShopName">اسم المتجر</s:String>
+    <s:String x:Key="Settings_ShopLogo">شعار المتجر</s:String>
+    <s:String x:Key="Settings_ShopAddress">عنوان المتجر</s:String>
+    <s:String x:Key="Settings_ShopPhone">هاتف المتجر</s:String>
+    <s:String x:Key="Settings_Database">قاعدة البيانات</s:String>
+    <s:String x:Key="Settings_Backup">نسخ احتياطي</s:String>
+    <s:String x:Key="Settings_Restore">استعادة</s:String>
+    <s:String x:Key="Settings_WipeData">مسح البيانات</s:String>
+    <s:String x:Key="Settings_PrimaryCurrency">العملة الرئيسية</s:String>
+
+    <s:String x:Key="Settings_ExchangeRate">سعر الصرف (USD → IQD)</s:String>
+    <s:String x:Key="Settings_TaxRate">نسبة الضريبة %</s:String>
+    <s:String x:Key="Settings_Currency">العملة</s:String>
+    <s:String x:Key="Settings_PaperSizeSelection">اختر مقاس الورق</s:String>
+    <s:String x:Key="Settings_PrinterSelection">اختر طابعة</s:String>
+    <s:String x:Key="Settings_SavePath">مسار الحفظ</s:String>
+    <s:String x:Key="Settings_SelectFolder">اختر مجلد</s:String>
+    <s:String x:Key="Settings_AdvancedPrint">إعدادات الطباعة المتقدمة</s:String>
+
+    <!-- Typography -->
+    <s:String x:Key="Settings_Typography">الخطوط والنصوص</s:String>
+    <s:String x:Key="Settings_FontFamily">نوع الخط</s:String>
+    <s:String x:Key="Settings_FontSize_Header">حجم العناوين</s:String>
+    <s:String x:Key="Settings_FontSize_Body">حجم النصوص</s:String>
+    <s:String x:Key="Settings_FontSize_Button">حجم الأزرار</s:String>
+    <s:String x:Key="Settings_ResetFonts">استعادة الافتراضي</s:String>
+    <s:String x:Key="Settings_ResetDatabase">إعادة تعيين قاعدة البيانات</s:String>
+    <s:String x:Key="Settings_PrintHeader">نص الرأس (Header)</s:String>
+    <s:String x:Key="Settings_PrintHeaderHint">نص يظهر أعلى الفاتورة (اسم المحل، رسالة ترحيب)</s:String>
+    <s:String x:Key="Settings_PrintFooter">نص التذييل (Footer)</s:String>
+    <s:String x:Key="Settings_PrintFooterHint">نص يظهر أسفل الفاتورة (سياسة الإرجاع، شكراً لكم)</s:String>
+    <s:String x:Key="Settings_LogoSettings">إعدادات الشعار</s:String>
+    <s:String x:Key="Settings_ShowLogo">إظهار الشعار في الفاتورة</s:String>
+    <s:String x:Key="Settings_LogoPathHint">مسار ملف شعار المحل</s:String>
+    <s:String x:Key="Settings_DisplayOptions">خيارات عرض البيانات</s:String>
+    <s:String x:Key="Settings_ShowCashier">عرض اسم الموظف (الكاشير)</s:String>
+    <s:String x:Key="Settings_ShowCustomer">عرض تفاصيل الزبون</s:String>
+    <s:String x:Key="Settings_ShowTax">عرض ضريبة القيمة المضافة</s:String>
+    <s:String x:Key="Settings_ShowDiscount">عرض قيمة الخصم</s:String>
+    <s:String x:Key="Action_SaveAndClose">حفظ وإغلاق</s:String>
+
+    <!-- Messages -->
+    <s:String x:Key="Msg_Confirm">تأكيد</s:String>
+    <s:String x:Key="Msg_Success">نجاح</s:String>
+    <s:String x:Key="Msg_Error">خطأ</s:String>
+    <s:String x:Key="Msg_Warning">تحذير</s:String>
+    <s:String x:Key="Msg_DeleteConfirm">هل أنت متأكد من حذف هذا العنصر؟</s:String>
+    <s:String x:Key="Msg_SaveSuccess">تم الحفظ بنجاح</s:String>
+    <s:String x:Key="Msg_DeleteSuccess">تم الحذف بنجاح</s:String>
+    <s:String x:Key="Msg_SaleComplete">تمت عملية البيع بنجاح</s:String>
+    <s:String x:Key="Msg_PrintSuccess">تمت الطباعة بنجاح</s:String>
+
+    <!-- Reports View -->
+    <s:String x:Key="Reports_SalesTrend">اتجاه المبيعات</s:String>
+    <s:String x:Key="Reports_TopProducts">أكثر المنتجات مبيعاً (بالكمية)</s:String>
+    <s:String x:Key="Reports_RevenueByProduct">توزيع الإيرادات حسب المنتج</s:String>
+    <s:String x:Key="Reports_RecentTransactions">أحدث المعاملات</s:String>
+    <s:String x:Key="Reports_Completed">مكتمل</s:String>
+
+    <!-- POS View -->
+    <s:String x:Key="POS_InvoicePreview">معاينة الفاتورة</s:String>
+    <s:String x:Key="POS_DateLabel">التاريخ:</s:String>
+    <s:String x:Key="POS_Draft">مسودة</s:String>
+    <s:String x:Key="POS_GrandTotal">المجموع الكلي</s:String>
+    <s:String x:Key="POS_PayAndPrint">سداد وطباعة</s:String>
+    <s:String x:Key="POS_PrintAndConfirm">طباعة وتأكيد</s:String>
+    <s:String x:Key="POS_Preview">معاينة</s:String>
+    <s:String x:Key="POS_CashDrawer">الصندوق</s:String>
+    <s:String x:Key="POS_InvoiceTab1">فاتورة 1</s:String>
+    <s:String x:Key="POS_InvoiceTab2">فاتورة 2</s:String>
+    <s:String x:Key="POS_InvoiceTab3">فاتورة 3</s:String>
+    <s:String x:Key="POS_InvoiceTab4">فاتورة 4</s:String>
+
+    <!-- Settings View -->
+    <s:String x:Key="Settings_SaveSettings">حفظ الإعدادات</s:String>
+    <s:String x:Key="Settings_EnableTax">تفعيل الضريبة</s:String>
+    <s:String x:Key="Settings_ShopInfo">معلومات المحل</s:String>
+    <s:String x:Key="Settings_PrintSettings">إعدادات الطباعة</s:String>
+    <s:String x:Key="Settings_OutputType">نوع الإخراج</s:String>
+    <s:String x:Key="Settings_PaperSize">مقاس الورق</s:String>
+    <s:String x:Key="Settings_SelectPrinter">اختر الطابعة</s:String>
+    <s:String x:Key="Settings_PdfFolder">مجلد حفظ PDF</s:String>
+    <s:String x:Key="Settings_DatabaseSize">حجم قاعدة البيانات</s:String>
+    <s:String x:Key="Settings_LastBackup">آخر نسخة احتياطية</s:String>
+    <s:String x:Key="Settings_DatabaseLocation">موقع القاعدة</s:String>
+    <s:String x:Key="Settings_OpenBackupFolder">فتح مجلد النسخ</s:String>
+
+    <!-- Debts View -->
+    <s:String x:Key="Debts_TotalDebts">إجمالي الديون</s:String>
+    <s:String x:Key="Debts_DebtorCount">عدد المدينين</s:String>
+    <s:String x:Key="Debts_AddNewDebt">إضافة دين جديد</s:String>
+    <s:String x:Key="Debts_NewCustomerQ">زبون جديد؟</s:String>
+    <s:String x:Key="Debts_CustomerName">اسم الزبون</s:String>
+    <s:String x:Key="Debts_NewCustomerName">اسم الزبون الجديد</s:String>
+    <s:String x:Key="Debts_PhoneNumber">رقم الهاتف</s:String>
+    <s:String x:Key="Debts_DebtAmount">مبلغ الدين</s:String>
+    <s:String x:Key="Debts_DebtDescription">وصف الدين</s:String>
+    <s:String x:Key="Debts_AddDebt">إضافة الدين</s:String>
+
+    <!-- Inventory View -->
+    <s:String x:Key="Inventory_StockValue">قيمة المخزون</s:String>
+
+    <!-- Sales View -->
+    <s:String x:Key="Sales_InvoiceCount">عدد الفواتير</s:String>
+
+    <!-- Products View -->
+    <s:String x:Key="Products_WeightProduct">منتج بالوزن</s:String>
+
+    <!-- DataGrid Headers -->
+    <s:String x:Key="Header_InvoiceNumber">رقم الفاتورة</s:String>
+    <s:String x:Key="Header_Customer">الزبون</s:String>
+    <s:String x:Key="Header_Products">المنتجات</s:String>
+    <s:String x:Key="Header_DebtLimit">الحد الأعلى</s:String>
+    <s:String x:Key="Header_Status">الحالة</s:String>
+
+    <!-- Missing Sale Keys -->
+    <s:String x:Key="Sale_Amount">المبلغ</s:String>
+    <s:String x:Key="Sale_Total">المجموع</s:String>
+    <s:String x:Key="Payment_NewPayment">دفعة جديدة</s:String>
+    <s:String x:Key="Action_Pay">سداد</s:String>
+
+    <s:String x:Key="Dashboard_Welcome">مرحباً بك في ApliqX-POS 👋</s:String>
+    <s:String x:Key="Dashboard_WelcomeSub">نظام نقاط البيع الاحترافي - يدعم اللغة العربية والإنجليزية مع دعم كامل للدينار العراقي</s:String>
+    <s:String x:Key="Dashboard_QuickActions">الإجراءات السريعة</s:String>
+    <s:String x:Key="Label_UserInitial">ح</s:String>
+
+    <!-- Restaurant Mode -->
+
+    <s:String x:Key="OrderType_InStore">محلي</s:String>
+    <s:String x:Key="TableNumber">رقم الطاولة</s:String>
+    <s:String x:Key="DriverName">اسم السائق</s:String>
+    <s:String x:Key="CustomerPhone">هاتف العميل</s:String>
+    <s:String x:Key="DeliveryAddress">عنوان التوصيل</s:String>
+</ResourceDictionary>

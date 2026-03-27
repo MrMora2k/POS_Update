@@ -1,0 +1,155 @@
+<UserControl x:Class="ApliqxPos.Views.AdvancedPrintSettingsContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:ApliqxPos.Converters"
+             mc:Ignorable="d" 
+             FlowDirection="RightToLeft">
+    
+    <Border Background="#1E1E3F" 
+            BorderBrush="{DynamicResource MaterialDesignDivider}" 
+            BorderThickness="0">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="#2A2A57" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="PrinterSettings" Width="32" Height="32" 
+                                              Foreground="{StaticResource AccentBrush}"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,16,0"/>
+                    <TextBlock Text="{DynamicResource Settings_AdvancedPrint}" 
+                               FontSize="22" FontWeight="Bold"
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Content -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Column 1: Header/Footer & Text -->
+                    <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                        <!-- Header Text -->
+                        <Border Background="#252547" CornerRadius="12" Padding="16" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Settings_PrintHeader}" FontWeight="SemiBold" Foreground="#A0A0C0" Margin="0,0,0,12"/>
+                                <TextBox Text="{Binding PrintHeaderCustomText}"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         AcceptsReturn="True"
+                                         Height="90"
+                                         Foreground="White"
+                                         VerticalScrollBarVisibility="Auto"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Settings_PrintHeaderHint}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Footer Text -->
+                        <Border Background="#252547" CornerRadius="12" Padding="16" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Settings_PrintFooter}" FontWeight="SemiBold" Foreground="#A0A0C0" Margin="0,0,0,12"/>
+                                <TextBox Text="{Binding PrintFooterCustomText}"
+                                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                         AcceptsReturn="True"
+                                         Height="90"
+                                         Foreground="White"
+                                         VerticalScrollBarVisibility="Auto"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Settings_PrintFooterHint}"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Logo Settings -->
+                        <Border Background="#252547" CornerRadius="12" Padding="16">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Settings_LogoSettings}" FontWeight="SemiBold" Foreground="#A0A0C0" Margin="0,0,0,16"/>
+                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                    <ToggleButton IsChecked="{Binding PrintShowLogo}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  Margin="0,0,16,0"/>
+                                    <TextBlock Text="{DynamicResource Settings_ShowLogo}" Foreground="White" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <Grid IsEnabled="{Binding PrintShowLogo}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding PrintLogoPath}"
+                                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                             Foreground="White"
+                                             materialDesign:HintAssist.Hint="{DynamicResource Settings_LogoPathHint}"/>
+                                    <Button Grid.Column="1"
+                                            Command="{Binding BrowseLogoCommand}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            Foreground="{StaticResource AccentBrush}"
+                                            Margin="8,0,0,0">
+                                        <materialDesign:PackIcon Kind="FolderImage" Width="24" Height="24"/>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Column 2: Visibility Toggles -->
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                        <Border Background="#252547" CornerRadius="12" Padding="16">
+                            <StackPanel>
+                                 <TextBlock Text="{DynamicResource Settings_DisplayOptions}" FontWeight="SemiBold" Foreground="#A0A0C0" Margin="0,0,0,20"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <ToggleButton IsChecked="{Binding PrintShowCashierName}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  Margin="0,0,16,0"/>
+                                    <TextBlock Text="{DynamicResource Settings_ShowCashier}" Foreground="White" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <ToggleButton IsChecked="{Binding PrintShowCustomerInfo}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  Margin="0,0,16,0"/>
+                                    <TextBlock Text="{DynamicResource Settings_ShowCustomer}" Foreground="White" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <ToggleButton IsChecked="{Binding PrintShowTaxDetails}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  Margin="0,0,16,0"/>
+                                    <TextBlock Text="{DynamicResource Settings_ShowTax}" Foreground="White" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                                    <ToggleButton IsChecked="{Binding PrintShowDiscount}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  Margin="0,0,16,0"/>
+                                    <TextBlock Text="{DynamicResource Settings_ShowDiscount}" Foreground="White" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
+                <Button Click="CloseButton_Click" 
+                        Content="{DynamicResource Action_SaveAndClose}" 
+                        Padding="32,8"
+                        Style="{StaticResource MaterialDesignRaisedButton}" 
+                        Background="{StaticResource PrimaryGradient}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

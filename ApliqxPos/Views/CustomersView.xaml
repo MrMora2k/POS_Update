@@ -1,0 +1,369 @@
+<UserControl x:Class="ApliqxPos.Views.CustomersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:ApliqxPos.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="Transparent">
+    
+    <UserControl.DataContext>
+        <vm:CustomersViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header Bar -->
+        <Border Grid.Row="0" Style="{StaticResource PremiumCard}" Padding="20" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Search -->
+                <TextBox Grid.Column="0" 
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="{DynamicResource Action_Search}"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         FontSize="14"
+                         Padding="12,10"
+                         MaxWidth="400"
+                         HorizontalAlignment="Left">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding SearchCustomersCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                
+                <!-- Debt Filter Toggle -->
+                <ToggleButton Grid.Column="1"
+                              IsChecked="{Binding ShowOnlyWithDebt}"
+                              Command="{Binding ToggleDebtFilterCommand}"
+                              Style="{StaticResource MaterialDesignFlatToggleButton}"
+                              ToolTip="{DynamicResource Customer_CurrentDebt}"
+                              Margin="16,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CreditCard" Width="20" Height="20" Margin="0,0,8,0"/>
+                        <TextBlock Text="{DynamicResource Nav_Debts}"/>
+                    </StackPanel>
+                </ToggleButton>
+                
+                <!-- Add Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding OpenAddDialogCommand}"
+                        Style="{StaticResource GradientButton}"
+                        Height="44"
+                        Padding="20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountPlus" Width="20" Height="20" Margin="0,0,8,0"/>
+                        <TextBlock Text="{DynamicResource Customer_NewCustomer}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <!-- Customers Grid -->
+        <Border Grid.Row="1" Style="{StaticResource PremiumCard}" Padding="0">
+            <DataGrid ItemsSource="{Binding Customers}"
+                      SelectedItem="{Binding SelectedCustomer}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      RowBackground="Transparent"
+                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      RowStyle="{StaticResource PremiumDataGridRow}"
+                      CellStyle="{StaticResource PremiumDataGridCell}"
+                      FlowDirection="LeftToRight">
+                
+                <DataGrid.Columns>
+                    <!-- Customer Name -->
+                    <DataGridTemplateColumn Width="*" MinWidth="200">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="12,8" Orientation="Horizontal">
+                                    <!-- Avatar -->
+                                    <Border Width="40" Height="40" CornerRadius="20" 
+                                            Background="{StaticResource PrimaryGradient}"
+                                            Margin="0,0,12,0">
+                                        <TextBlock Text="{Binding Name[0]}" 
+                                                   FontSize="16" FontWeight="Bold"
+                                                   Foreground="White"
+                                                   HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                        <TextBlock Text="{Binding Phone}" FontSize="12" 
+                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Phone -->
+                    <DataGridTextColumn Binding="{Binding Phone}" Width="140">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Phone}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
+                    <!-- Address -->
+                    <DataGridTextColumn Binding="{Binding Address}" Width="200">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Address}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
+                    <!-- Debt Limit -->
+                    <DataGridTemplateColumn Width="120">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Customer_DebtLimit}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="12,0">
+                                    <Run Text="{Binding DebtLimit, StringFormat={}{0:N0}}"/>
+                                    <Run Text=" د.ع" FontSize="11" 
+                                         Foreground="{StaticResource TextMutedBrush}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Current Debt -->
+                    <DataGridTemplateColumn Width="140">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Customer_CurrentDebt}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Padding="10,6" CornerRadius="8" HorizontalAlignment="Center"
+                                        Background="{Binding CurrentDebt, Converter={StaticResource DebtToBackgroundConverter}}">
+                                    <TextBlock FontWeight="SemiBold">
+                                        <Run Text="{Binding CurrentDebt, StringFormat={}{0:N0}}"/>
+                                        <Run Text=" د.ع" FontSize="11"/>
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Actions -->
+                    <DataGridTemplateColumn Header="" Width="160">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <!-- Pay Debt -->
+                                    <Button Command="{Binding DataContext.OpenPayDebtDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="{DynamicResource Customer_PayDebt}"
+                                            Width="36" Height="36"
+                                            Visibility="{Binding CurrentDebt, Converter={StaticResource DebtToVisibilityConverter}}">
+                                        <materialDesign:PackIcon Kind="CashMultiple" Width="18" Height="18"
+                                                                  Foreground="{StaticResource SuccessBrush}"/>
+                                    </Button>
+                                    <!-- Edit -->
+                                    <Button Command="{Binding DataContext.OpenEditDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="{DynamicResource Action_Edit}"
+                                            Width="36" Height="36">
+                                        <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"
+                                                                  Foreground="{StaticResource AccentBrush}"/>
+                                    </Button>
+                                    <!-- Delete -->
+                                    <Button Command="{Binding DataContext.DeleteCustomerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="{DynamicResource Action_Delete}"
+                                            Width="36" Height="36">
+                                        <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"
+                                                                  Foreground="{StaticResource DangerBrush}"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        
+        <!-- Add/Edit Customer Dialog -->
+        <materialDesign:DialogHost IsOpen="{Binding IsDialogOpen}" 
+                                    DialogTheme="Inherit"
+                                    CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Background="{StaticResource CardBackgroundBrush}" 
+                        CornerRadius="16" 
+                        Padding="24"
+                        MinWidth="450">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Dialog Header -->
+                        <TextBlock Grid.Row="0" 
+                                   Text="{Binding IsEditMode, Converter={StaticResource BoolToTextConverter}, ConverterParameter=تعديل الزبون|زبون جديد}"
+                                   Style="{StaticResource SubheaderText}"
+                                   Margin="0,0,0,20"/>
+                        
+                        <!-- Form -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                            <!-- Name -->
+                            <TextBox Text="{Binding CustomerName}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Name}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,12"/>
+                            
+                            <!-- Phone -->
+                            <TextBox Text="{Binding CustomerPhone}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Phone}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,12"/>
+                            
+                            <!-- Address -->
+                            <TextBox Text="{Binding CustomerAddress}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Address}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,12"/>
+                            
+                            <!-- Debt Limit -->
+                            <TextBox Text="{Binding CustomerDebtLimit}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Customer_DebtLimit}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,12"/>
+                            
+                            <!-- Notes -->
+                            <TextBox Text="{Binding CustomerNotes}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Notes}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="80"/>
+                        </StackPanel>
+                        
+                        <!-- Dialog Actions -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding CloseDialogCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Content="{DynamicResource Action_Cancel}"
+                                    Margin="0,0,12,0"/>
+                            <Button Command="{Binding SaveCustomerCommand}"
+                                    Style="{StaticResource GradientButton}"
+                                    Content="{DynamicResource Action_Save}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        
+        <!-- Pay Debt Dialog -->
+        <materialDesign:DialogHost IsOpen="{Binding ShowDebtPaymentDialog}" 
+                                    DialogTheme="Inherit"
+                                    CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Background="{StaticResource CardBackgroundBrush}" 
+                        CornerRadius="16" 
+                        Padding="24"
+                        MinWidth="400">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Dialog Header -->
+                        <TextBlock Grid.Row="0" 
+                                   Text="{DynamicResource Customer_PayDebt}"
+                                   Style="{StaticResource SubheaderText}"
+                                   Margin="0,0,0,16"/>
+                        
+                        <!-- Current Debt Display -->
+                        <Border Grid.Row="1" 
+                                Background="{StaticResource SurfaceBrush}" 
+                                CornerRadius="12" 
+                                Padding="16"
+                                Margin="0,0,0,20">
+                            <StackPanel>
+                                <TextBlock Text="{Binding SelectedCustomer.Name}" 
+                                           FontWeight="Bold" FontSize="16"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock Text="{DynamicResource Customer_CurrentDebt}" 
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Margin="0,0,8,0"/>
+                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource DangerBrush}">
+                                        <Run Text="{Binding SelectedCustomer.CurrentDebt, StringFormat={}{0:N0}}"/>
+                                        <Run Text=" د.ع"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Form -->
+                        <StackPanel Grid.Row="2" Margin="0,0,0,20">
+                            <!-- Payment Amount -->
+                            <TextBox Text="{Binding PaymentAmount}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Amount}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     FontSize="18"
+                                     Margin="0,0,0,12"/>
+                            
+                            <!-- Notes -->
+                            <TextBox Text="{Binding PaymentNotes}"
+                                     materialDesign:HintAssist.Hint="{DynamicResource Label_Notes}"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                        </StackPanel>
+                        
+                        <!-- Dialog Actions -->
+                        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding CloseDialogCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Content="{DynamicResource Action_Cancel}"
+                                    Margin="0,0,12,0"/>
+                            <Button Command="{Binding PayDebtCommand}"
+                                    Style="{StaticResource GradientButton}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CashCheck" Width="18" Height="18" Margin="0,0,8,0"/>
+                                    <TextBlock Text="{DynamicResource Customer_PayDebt}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

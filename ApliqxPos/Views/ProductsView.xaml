@@ -1,0 +1,385 @@
+<UserControl x:Class="ApliqxPos.Views.ProductsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:ApliqxPos.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="Transparent">
+    
+    <UserControl.DataContext>
+        <vm:ProductsViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header Bar -->
+        <Border Grid.Row="0" Style="{StaticResource PremiumCard}" Padding="20" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Search -->
+                <TextBox Grid.Column="0" 
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         materialDesign:HintAssist.Hint="{DynamicResource Action_Search}"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         FontSize="14"
+                         Padding="12,10"
+                         MaxWidth="400"
+                         HorizontalAlignment="Left">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding SearchProductsCommand}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                
+                <!-- Category Filter -->
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCategory}"
+                          DisplayMemberPath="Name"
+                          materialDesign:HintAssist.Hint="{DynamicResource Product_Category}"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Width="200"
+                          Margin="16,0">
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding FilterByCategoryCommand}"/>
+                    </ComboBox.InputBindings>
+                </ComboBox>
+                
+                <!-- Add Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding OpenAddDialogCommand}"
+                        Style="{StaticResource GradientButton}"
+                        Height="44"
+                        Padding="20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Plus" Width="20" Height="20" Margin="0,0,8,0"/>
+                        <TextBlock Text="{DynamicResource Product_NewProduct}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+        
+        <!-- Products Grid -->
+        <Border Grid.Row="1" Style="{StaticResource PremiumCard}" Padding="0">
+            <DataGrid ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      RowBackground="Transparent"
+                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      RowStyle="{StaticResource PremiumDataGridRow}"
+                      CellStyle="{StaticResource PremiumDataGridCell}"
+                      FlowDirection="LeftToRight">
+                
+                <DataGrid.Columns>
+                    <!-- Product Name -->
+                    <DataGridTemplateColumn Width="*" MinWidth="200">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="12,8">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
+                                    <TextBlock Text="{Binding NameAr}" FontSize="12" 
+                                               Foreground="{StaticResource TextMutedBrush}"
+                                               Visibility="{Binding NameAr, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Barcode -->
+                    <DataGridTextColumn Binding="{Binding Barcode}" Width="120">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Product_Barcode}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
+                    <!-- Category -->
+                    <DataGridTextColumn Binding="{Binding Category.Name}" Width="120">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Product_Category}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    
+                    <!-- Cost Price -->
+                    <DataGridTemplateColumn Width="120">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Product_CostPrice}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="12,0">
+                                    <Run Text="{Binding CostPrice, StringFormat={}{0:N0}}"/>
+                                    <Run Text=" " />
+                                    <Run Text="{Binding Currency}" FontSize="11" 
+                                         Foreground="{StaticResource TextMutedBrush}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Sale Price -->
+                    <DataGridTemplateColumn Width="120">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Product_SalePrice}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="12,0" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold">
+                                    <Run Text="{Binding SalePrice, StringFormat={}{0:N0}}"/>
+                                    <Run Text=" " />
+                                    <Run Text="{Binding Currency}" FontSize="11"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Stock -->
+                    <DataGridTemplateColumn Width="100">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Product_Stock}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Padding="8,4" CornerRadius="6" HorizontalAlignment="Center"
+                                        Background="{Binding Stock, Converter={StaticResource StockToBackgroundConverter}}">
+                                    <TextBlock Text="{Binding Stock}" 
+                                               FontWeight="SemiBold"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Actions -->
+                    <DataGridTemplateColumn Header="" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Command="{Binding DataContext.OpenEditDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="{DynamicResource Action_Edit}"
+                                            Width="36" Height="36">
+                                        <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"
+                                                                  Foreground="{StaticResource AccentBrush}"/>
+                                    </Button>
+                                    <Button Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="{DynamicResource Action_Delete}"
+                                            Width="36" Height="36">
+                                        <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"
+                                                                  Foreground="{StaticResource DangerBrush}"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        
+        <!-- Add/Edit Dialog -->
+        <materialDesign:DialogHost IsOpen="{Binding IsDialogOpen}" 
+                                    DialogTheme="Inherit"
+                                    CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <Border Background="{StaticResource CardBackgroundBrush}" 
+                        CornerRadius="16" 
+                        Padding="24"
+                        MinWidth="500">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Dialog Header -->
+                        <TextBlock Grid.Row="0" 
+                                   Text="{Binding IsEditMode, Converter={StaticResource BoolToTextConverter}, ConverterParameter=Edit|Add}"
+                                   Style="{StaticResource SubheaderText}"
+                                   Margin="0,0,0,20"/>
+                        
+                        <!-- Form -->
+                        <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                            <UniformGrid Columns="2" Rows="5">
+                                <UniformGrid.Resources>
+                                    <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                                        <Setter Property="Margin" Value="4,0,4,12"/>
+                                    </Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+                                        <Setter Property="Margin" Value="4,0,4,12"/>
+                                    </Style>
+                                </UniformGrid.Resources>
+
+                                <!-- 1. Name -->
+                                <TextBox Text="{Binding ProductName}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Label_Name}"/>
+
+                                <!-- 2. Name Arabic (Optional) -->
+                                <TextBox Text="{Binding ProductNameAr}"
+                                         materialDesign:HintAssist.Hint="الاسم (عربي)"
+                                         Visibility="{Binding IsRestaurantMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                                <!-- 3. Category -->
+                                <ComboBox ItemsSource="{Binding Categories}"
+                                          SelectedValue="{Binding ProductCategoryId}"
+                                          SelectedValuePath="Id"
+                                          DisplayMemberPath="Name"
+                                          materialDesign:HintAssist.Hint="{DynamicResource Product_Category}"/>
+
+                                <!-- 4. Barcode (Optional) -->
+                                <TextBox Text="{Binding ProductBarcode}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Product_Barcode}"
+                                         Visibility="{Binding IsRestaurantMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                                <!-- 5. Sale Price -->
+                                <TextBox Text="{Binding ProductSalePrice}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Product_SalePrice}"/>
+
+                                <!-- 6. Cost Price (Optional) -->
+                                <TextBox Text="{Binding ProductCostPrice}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Product_CostPrice}"
+                                         Visibility="{Binding IsRestaurantMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                                <!-- 7. Stock -->
+                                <TextBox Text="{Binding ProductStock}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Inventory_Stock}"
+                                         Visibility="{Binding IsRestaurantMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                                <!-- 8. Min Stock (Optional) -->
+                                <TextBox Text="{Binding ProductMinStock}"
+                                         materialDesign:HintAssist.Hint="{DynamicResource Inventory_MinStock}"
+                                         Visibility="{Binding IsRestaurantMode, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
+
+                                <!-- 9. Currency -->
+                                <ComboBox SelectedItem="{Binding ProductCurrency}"
+                                          materialDesign:HintAssist.Hint="العملة">
+                                    <ComboBoxItem Content="IQD"/>
+                                    <ComboBoxItem Content="USD"/>
+                                </ComboBox>
+
+                                <!-- 10. IsWeighted -->
+                                <StackPanel Orientation="Horizontal" 
+                                            VerticalAlignment="Center"
+                                            Margin="8,0,0,12">
+                                    <ToggleButton IsChecked="{Binding ProductIsWeighted}"
+                                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                  ToolTip="منتج ذو وزن (مثل اللحوم)"/>
+                                    <TextBlock Text="منتج بالوزن" 
+                                               VerticalAlignment="Center"
+                                               Margin="8,0,0,0"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </StackPanel>
+                            </UniformGrid>
+                            
+                            <!-- Product Image Section -->
+                            <Border Margin="0,12,0,0" 
+                                    Padding="12" 
+                                    CornerRadius="8" 
+                                    Background="{StaticResource SurfaceBrush}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <!-- Image Preview -->
+                                    <Border Grid.Column="0" 
+                                            Width="60" Height="60" 
+                                            CornerRadius="8" 
+                                            Background="{StaticResource CardBackgroundBrush}"
+                                            BorderBrush="{StaticResource TextMutedBrush}"
+                                            BorderThickness="1">
+                                        <Grid>
+                                            <!-- Placeholder Icon -->
+                                            <materialDesign:PackIcon Kind="Image" 
+                                                                      Width="24" Height="24" 
+                                                                      HorizontalAlignment="Center" 
+                                                                      VerticalAlignment="Center"
+                                                                      Foreground="{StaticResource TextMutedBrush}"
+                                                                      Visibility="{Binding ProductImagePath, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Inverse}"/>
+                                            <!-- Actual Image -->
+                                            <Image Source="{Binding ProductImagePath}" 
+                                                   Stretch="UniformToFill"
+                                                   Visibility="{Binding ProductImagePath, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                        </Grid>
+                                    </Border>
+                                    
+                                    <!-- Image Path Text -->
+                                    <TextBlock Grid.Column="1" 
+                                               Text="{Binding ProductImagePath, TargetNullValue='لم يتم اختيار صورة'}"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    
+                                    <!-- Buttons -->
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button Command="{Binding SelectImageCommand}"
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="اختر صورة">
+                                            <materialDesign:PackIcon Kind="FolderImage" Foreground="{StaticResource AccentBrush}"/>
+                                        </Button>
+                                        <Button Command="{Binding ClearImageCommand}"
+                                                Style="{StaticResource MaterialDesignIconButton}"
+                                                ToolTip="مسح الصورة"
+                                                Visibility="{Binding ProductImagePath, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <materialDesign:PackIcon Kind="Close" Foreground="{StaticResource DangerBrush}"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Dialog Actions -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding CloseDialogCommand}"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    Content="{DynamicResource Action_Cancel}"
+                                    Margin="0,0,12,0"/>
+                            <Button Command="{Binding SaveProductCommand}"
+                                    Style="{StaticResource GradientButton}"
+                                    Content="{DynamicResource Action_Save}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

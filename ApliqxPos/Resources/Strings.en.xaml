@@ -1,0 +1,257 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+
+    <!-- App Info -->
+    <s:String x:Key="AppName">ProPOS</s:String>
+    <s:String x:Key="AppTitle">ProPOS - Point of Sale</s:String>
+    <s:String x:Key="AppDescription">Professional Point of Sale System</s:String>
+
+    <!-- Navigation -->
+    <s:String x:Key="Nav_Dashboard">Dashboard</s:String>
+    <s:String x:Key="Nav_POS">Point of Sale</s:String>
+    <s:String x:Key="Nav_Inventory">Inventory</s:String>
+    <s:String x:Key="Nav_Products">Products</s:String>
+    <s:String x:Key="Nav_Categories">Categories</s:String>
+    <s:String x:Key="Categories_Title">Categories</s:String>
+    <s:String x:Key="Categories_AddCategory">Add Category</s:String>
+    <s:String x:Key="Categories_EditCategory">Edit Category</s:String>
+    <s:String x:Key="Categories_CategoryName">Category Name</s:String>
+    <s:String x:Key="Categories_Icon">Icon</s:String>
+    <s:String x:Key="Nav_Customers">Customers</s:String>
+    <s:String x:Key="Nav_Debts">Debts</s:String>
+    <s:String x:Key="Nav_Sales">Sales</s:String>
+    <s:String x:Key="Nav_Reports">Reports</s:String>
+    <s:String x:Key="Nav_Settings">Settings</s:String>
+
+    <!-- Common Actions -->
+    <s:String x:Key="Action_Save">Save</s:String>
+    <s:String x:Key="Action_Cancel">Cancel</s:String>
+    <s:String x:Key="Action_Delete">Delete</s:String>
+    <s:String x:Key="Action_Edit">Edit</s:String>
+    <s:String x:Key="Action_Add">Add</s:String>
+    <s:String x:Key="Action_Search">Search</s:String>
+    <s:String x:Key="Action_Print">Print</s:String>
+    <s:String x:Key="Action_Export">Export</s:String>
+    <s:String x:Key="Action_Refresh">Refresh</s:String>
+    <s:String x:Key="Action_Close">Close</s:String>
+
+    <!-- Common Labels -->
+    <s:String x:Key="Label_Name">Name</s:String>
+    <s:String x:Key="Label_Price">Price</s:String>
+    <s:String x:Key="Label_Quantity">Quantity</s:String>
+    <s:String x:Key="Label_Total">Total</s:String>
+    <s:String x:Key="Label_Subtotal">Subtotal</s:String>
+    <s:String x:Key="Label_Discount">Discount</s:String>
+    <s:String x:Key="Label_Tax">Tax</s:String>
+    <s:String x:Key="Label_Date">Date</s:String>
+    <s:String x:Key="Label_Phone">Phone</s:String>
+    <s:String x:Key="Label_Address">Address</s:String>
+    <s:String x:Key="Label_Notes">Notes</s:String>
+    <s:String x:Key="Label_Description">Description</s:String>
+    <s:String x:Key="Label_Status">Status</s:String>
+    <s:String x:Key="Label_Amount">Amount</s:String>
+    <s:String x:Key="Label_Balance">Balance</s:String>
+    <s:String x:Key="Label_Paid">Paid</s:String>
+    <s:String x:Key="Label_Remaining">Remaining</s:String>
+
+    <!-- Currency -->
+    <s:String x:Key="Currency_IQD">IQD</s:String>
+    <s:String x:Key="Currency_IQD_Symbol">د.ع</s:String>
+    <s:String x:Key="Currency_USD">USD</s:String>
+    <s:String x:Key="Currency_USD_Symbol">$</s:String>
+
+    <!-- POS -->
+    <s:String x:Key="POS_Checkout">Checkout</s:String>
+    <s:String x:Key="POS_Cart">Cart</s:String>
+    <s:String x:Key="POS_EmptyCart">Cart is empty</s:String>
+    <s:String x:Key="POS_AddProduct">Add Product</s:String>
+    <s:String x:Key="POS_ScanBarcode">Scan Barcode</s:String>
+    <s:String x:Key="POS_PaymentMethod">Payment Method</s:String>
+    <s:String x:Key="POS_Cash">Cash</s:String>
+    <s:String x:Key="POS_Card">Card</s:String>
+    <s:String x:Key="POS_Debt">On Debt</s:String>
+    <s:String x:Key="POS_CompleteSale">Complete Sale</s:String>
+    <s:String x:Key="POS_OpenDrawer">Open Drawer</s:String>
+    <s:String x:Key="Cart">Cart</s:String>
+    <s:String x:Key="CartEmpty">Cart is empty</s:String>
+    <s:String x:Key="ClearCart">Clear Cart</s:String>
+    <s:String x:Key="Checkout">Checkout</s:String>
+    <s:String x:Key="Subtotal">Subtotal</s:String>
+    <s:String x:Key="Discount">Discount</s:String>
+    <s:String x:Key="Total">Total</s:String>
+    <s:String x:Key="Search_Products">Search products...</s:String>
+    <s:String x:Key="NoProducts">No products found</s:String>
+    <s:String x:Key="Product_Stock">Stock</s:String>
+    <s:String x:Key="Customer">Customer</s:String>
+
+    <!-- Customers -->
+    <s:String x:Key="Customer_NewCustomer">New Customer</s:String>
+    <s:String x:Key="Customer_EditCustomer">Edit Customer</s:String>
+    <s:String x:Key="Customer_WalkIn">Walk-in Customer</s:String>
+    <s:String x:Key="Customer_DebtLimit">Debt Limit</s:String>
+    <s:String x:Key="Customer_CurrentDebt">Current Debt</s:String>
+    <s:String x:Key="Customer_PayDebt">Pay Debt</s:String>
+    <s:String x:Key="Customer_DebtHistory">Debt History</s:String>
+
+    <!-- Inventory -->
+    <s:String x:Key="Inventory_Stock">Stock</s:String>
+    <s:String x:Key="Inventory_LowStock">Low Stock</s:String>
+    <s:String x:Key="Inventory_OutOfStock">Out of Stock</s:String>
+    <s:String x:Key="Inventory_MinStock">Minimum Stock</s:String>
+    <s:String x:Key="Inventory_AddStock">Add Stock</s:String>
+    <s:String x:Key="Inventory_AdjustStock">Adjust Stock</s:String>
+
+    <!-- Products -->
+    <s:String x:Key="Product_Barcode">Barcode</s:String>
+    <s:String x:Key="Product_Category">Category</s:String>
+    <s:String x:Key="Product_CostPrice">Cost Price</s:String>
+    <s:String x:Key="Product_SalePrice">Sale Price</s:String>
+    <s:String x:Key="Product_NewProduct">New Product</s:String>
+    <s:String x:Key="Product_EditProduct">Edit Product</s:String>
+
+    <!-- Reports -->
+    <s:String x:Key="Report_Daily">Daily Report</s:String>
+    <s:String x:Key="Report_Weekly">Weekly Report</s:String>
+    <s:String x:Key="Report_Monthly">Monthly Report</s:String>
+    <s:String x:Key="Report_TotalSales">Total Sales</s:String>
+    <s:String x:Key="Report_TotalProfit">Total Profit</s:String>
+    <s:String x:Key="Report_TotalExpenses">Total Expenses</s:String>
+
+    <!-- Settings -->
+    <s:String x:Key="Settings_General">General</s:String>
+    <s:String x:Key="Settings_Appearance">Appearance</s:String>
+    <s:String x:Key="Settings_Language">Language</s:String>
+    <s:String x:Key="Settings_Theme">Theme</s:String>
+    <s:String x:Key="Settings_DarkMode">Dark Mode</s:String>
+    <s:String x:Key="Settings_LightMode">Light Mode</s:String>
+
+    <s:String x:Key="Settings_Printer">Printer</s:String>
+    <s:String x:Key="Settings_Shop">Shop Settings</s:String>
+    <s:String x:Key="Settings_ShopName">Shop Name</s:String>
+    <s:String x:Key="Settings_ShopLogo">Shop Logo</s:String>
+    <s:String x:Key="Settings_ShopAddress">Shop Address</s:String>
+    <s:String x:Key="Settings_ShopPhone">Shop Phone</s:String>
+    <s:String x:Key="Settings_Database">Database</s:String>
+    <s:String x:Key="Settings_Backup">Backup</s:String>
+    <s:String x:Key="Settings_Restore">Restore</s:String>
+    <s:String x:Key="Settings_WipeData">Wipe Data</s:String>
+    <s:String x:Key="Settings_PrimaryCurrency">Primary Currency</s:String>
+
+    <s:String x:Key="Settings_ExchangeRate">Exchange Rate (USD → IQD)</s:String>
+    <s:String x:Key="Settings_TaxRate">Tax Rate %</s:String>
+    <s:String x:Key="Settings_Currency">Currency</s:String>
+    <s:String x:Key="Settings_PaperSizeSelection">Select Paper Size</s:String>
+    <s:String x:Key="Settings_PrinterSelection">Select Printer</s:String>
+    <s:String x:Key="Settings_SavePath">Save Path</s:String>
+    <s:String x:Key="Settings_SelectFolder">Select Folder</s:String>
+    <s:String x:Key="Settings_AdvancedPrint">Advanced Print Settings</s:String>
+
+    <!-- Typography -->
+    <s:String x:Key="Settings_Typography">Typography &amp; Fonts</s:String>
+    <s:String x:Key="Settings_FontFamily">Font Family</s:String>
+    <s:String x:Key="Settings_FontSize_Header">Heading Size</s:String>
+    <s:String x:Key="Settings_FontSize_Body">Text Size</s:String>
+    <s:String x:Key="Settings_FontSize_Button">Button Size</s:String>
+    <s:String x:Key="Settings_ResetFonts">Reset Defaults</s:String>
+    <s:String x:Key="Settings_ResetDatabase">Reset Database</s:String>
+    <s:String x:Key="Settings_PrintHeader">Header Text</s:String>
+    <s:String x:Key="Settings_PrintHeaderHint">Text appearing at the top of the invoice (Shop name, welcome message)</s:String>
+    <s:String x:Key="Settings_PrintFooter">Footer Text</s:String>
+    <s:String x:Key="Settings_PrintFooterHint">Text appearing at the bottom of the invoice (Return policy, thank you)</s:String>
+    <s:String x:Key="Settings_LogoSettings">Logo Settings</s:String>
+    <s:String x:Key="Settings_ShowLogo">Show Logo on Invoice</s:String>
+    <s:String x:Key="Settings_LogoPathHint">Shop Logo Path</s:String>
+    <s:String x:Key="Settings_DisplayOptions">Display Options</s:String>
+    <s:String x:Key="Settings_ShowCashier">Show Cashier Name</s:String>
+    <s:String x:Key="Settings_ShowCustomer">Show Customer Details</s:String>
+    <s:String x:Key="Settings_ShowTax">Show VAT Tax</s:String>
+    <s:String x:Key="Settings_ShowDiscount">Show Discount Value</s:String>
+    <s:String x:Key="Action_SaveAndClose">Save &amp; Close</s:String>
+
+    <!-- Messages -->
+    <s:String x:Key="Msg_Confirm">Confirm</s:String>
+    <s:String x:Key="Msg_Success">Success</s:String>
+    <s:String x:Key="Msg_Error">Error</s:String>
+    <s:String x:Key="Msg_Warning">Warning</s:String>
+    <s:String x:Key="Msg_DeleteConfirm">Are you sure you want to delete this item?</s:String>
+    <s:String x:Key="Msg_SaveSuccess">Saved successfully</s:String>
+    <s:String x:Key="Msg_DeleteSuccess">Deleted successfully</s:String>
+    <s:String x:Key="Msg_SaleComplete">Sale completed successfully</s:String>
+    <s:String x:Key="Msg_PrintSuccess">Printed successfully</s:String>
+
+    <!-- Reports View -->
+    <s:String x:Key="Reports_SalesTrend">Sales Trend</s:String>
+    <s:String x:Key="Reports_TopProducts">Top Selling Products (by Qty)</s:String>
+    <s:String x:Key="Reports_RevenueByProduct">Revenue by Product</s:String>
+    <s:String x:Key="Reports_RecentTransactions">Recent Transactions</s:String>
+    <s:String x:Key="Reports_Completed">Completed</s:String>
+
+    <!-- POS View -->
+    <s:String x:Key="POS_InvoicePreview">Invoice Preview</s:String>
+    <s:String x:Key="POS_DateLabel">Date:</s:String>
+    <s:String x:Key="POS_Draft">DRAFT</s:String>
+    <s:String x:Key="POS_GrandTotal">Grand Total</s:String>
+    <s:String x:Key="POS_PayAndPrint">Pay &amp; Print</s:String>
+    <s:String x:Key="POS_PrintAndConfirm">Print &amp; Confirm</s:String>
+    <s:String x:Key="POS_Preview">Preview</s:String>
+    <s:String x:Key="POS_CashDrawer">Cash Drawer</s:String>
+    <s:String x:Key="POS_InvoiceTab1">Invoice 1</s:String>
+    <s:String x:Key="POS_InvoiceTab2">Invoice 2</s:String>
+    <s:String x:Key="POS_InvoiceTab3">Invoice 3</s:String>
+    <s:String x:Key="POS_InvoiceTab4">Invoice 4</s:String>
+
+    <!-- Settings View -->
+    <s:String x:Key="Settings_SaveSettings">Save Settings</s:String>
+    <s:String x:Key="Settings_EnableTax">Enable Tax</s:String>
+    <s:String x:Key="Settings_ShopInfo">Shop Information</s:String>
+    <s:String x:Key="Settings_PrintSettings">Print Settings</s:String>
+    <s:String x:Key="Settings_OutputType">Output Type</s:String>
+    <s:String x:Key="Settings_PaperSize">Paper Size</s:String>
+    <s:String x:Key="Settings_SelectPrinter">Select Printer</s:String>
+    <s:String x:Key="Settings_PdfFolder">PDF Save Folder</s:String>
+    <s:String x:Key="Settings_DatabaseSize">Database Size</s:String>
+    <s:String x:Key="Settings_LastBackup">Last Backup</s:String>
+    <s:String x:Key="Settings_DatabaseLocation">Database Location</s:String>
+    <s:String x:Key="Settings_OpenBackupFolder">Open Backup Folder</s:String>
+
+    <!-- Debts View -->
+    <s:String x:Key="Debts_TotalDebts">Total Debts</s:String>
+    <s:String x:Key="Debts_DebtorCount">Number of Debtors</s:String>
+    <s:String x:Key="Debts_AddNewDebt">Add New Debt</s:String>
+    <s:String x:Key="Debts_NewCustomerQ">New Customer?</s:String>
+    <s:String x:Key="Debts_CustomerName">Customer Name</s:String>
+    <s:String x:Key="Debts_NewCustomerName">New Customer Name</s:String>
+    <s:String x:Key="Debts_PhoneNumber">Phone Number</s:String>
+    <s:String x:Key="Debts_DebtAmount">Debt Amount</s:String>
+    <s:String x:Key="Debts_DebtDescription">Debt Description</s:String>
+    <s:String x:Key="Debts_AddDebt">Add Debt</s:String>
+
+    <!-- Inventory View -->
+    <s:String x:Key="Inventory_StockValue">Stock Value</s:String>
+
+    <!-- Sales View -->
+    <s:String x:Key="Sales_InvoiceCount">Invoice Count</s:String>
+
+    <!-- Products View -->
+    <s:String x:Key="Products_WeightProduct">Weight-based Product</s:String>
+
+    <!-- DataGrid Headers -->
+    <s:String x:Key="Header_InvoiceNumber">Invoice #</s:String>
+    <s:String x:Key="Header_Customer">Customer</s:String>
+    <s:String x:Key="Header_Products">Products</s:String>
+    <s:String x:Key="Header_DebtLimit">Debt Limit</s:String>
+    <s:String x:Key="Header_Status">Status</s:String>
+
+    <!-- Missing Sale Keys -->
+    <s:String x:Key="Sale_Amount">Amount</s:String>
+    <s:String x:Key="Sale_Total">Total</s:String>
+    <s:String x:Key="Report_TotalDebts">Total Debts</s:String>
+    <s:String x:Key="Payment_NewPayment">New Payment</s:String>
+    <s:String x:Key="Action_Pay">Pay</s:String>
+
+    <s:String x:Key="Dashboard_Welcome">Welcome to ProPOS 👋</s:String>
+    <s:String x:Key="Dashboard_WelcomeSub">Professional POS system - Supports Arabic and English with full IQD support</s:String>
+    <s:String x:Key="Dashboard_QuickActions">Quick Actions</s:String>
+    <s:String x:Key="Label_UserInitial">H</s:String>
+</ResourceDictionary>

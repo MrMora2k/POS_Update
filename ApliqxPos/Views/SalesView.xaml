@@ -1,0 +1,226 @@
+<UserControl x:Class="ApliqxPos.Views.SalesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:ApliqxPos.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="Transparent">
+    
+    <UserControl.DataContext>
+        <vm:SalesViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Stats Cards -->
+        <Grid Grid.Row="0" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Total Revenue -->
+            <Border Grid.Column="0" Style="{StaticResource PremiumCard}" Margin="0,0,12,0">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="10" 
+                                Background="{StaticResource SuccessGradient}" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="CashMultiple" Width="22" Height="22" 
+                                                      Foreground="White" HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Report_TotalSales}" 
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                    <TextBlock FontSize="28" FontWeight="Bold" 
+                               Margin="0,12,0,0"
+                               Foreground="{StaticResource SuccessBrush}">
+                        <Run Text="{Binding TotalRevenue, StringFormat={}{0:N0}}"/>
+                        <Run Text=" د.ع" FontSize="14"/>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            
+            <!-- Transaction Count -->
+            <Border Grid.Column="1" Style="{StaticResource PremiumCard}" Margin="6,0">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="10" 
+                                Background="{StaticResource PrimaryGradient}" Margin="0,0,12,0">
+                            <materialDesign:PackIcon Kind="Receipt" Width="22" Height="22" 
+                                                      Foreground="White" HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="{DynamicResource Sales_InvoiceCount}" 
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding Sales.Count}" 
+                               FontSize="28" FontWeight="Bold" 
+                               Margin="0,12,0,0"/>
+                </StackPanel>
+            </Border>
+            
+        </Grid>
+        
+        <!-- Header Bar (Filters) -->
+        <Border Grid.Row="1" Style="{StaticResource PremiumCard}" Padding="20" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Date Filters -->
+                <DatePicker Grid.Column="0"
+                            SelectedDate="{Binding StartDate}"
+                            materialDesign:HintAssist.Hint="{DynamicResource Report_StartDate}"
+                            Margin="0,0,16,0"
+                            Width="150"/>
+                            
+                <DatePicker Grid.Column="1"
+                            SelectedDate="{Binding EndDate}"
+                            materialDesign:HintAssist.Hint="{DynamicResource Report_EndDate}"
+                            Width="150"/>
+                            
+                <!-- Refresh Button -->
+                <Button Grid.Column="3"
+                        Command="{Binding LoadDataCommand}"
+                        Style="{StaticResource GradientButton}"
+                        Content="{DynamicResource Action_Refresh}"
+                        Width="120"
+                        Height="45"/>
+            </Grid>
+        </Border>
+        
+        <!-- Sales Grid -->
+        <Border Grid.Row="2" Style="{StaticResource PremiumCard}" Padding="0">
+            <DataGrid ItemsSource="{Binding Sales}"
+                      SelectedItem="{Binding SelectedSale}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      RowBackground="Transparent"
+                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      RowStyle="{StaticResource PremiumDataGridRow}"
+                      CellStyle="{StaticResource PremiumDataGridCell}"
+                      FlowDirection="LeftToRight">
+                
+                <DataGrid.Columns>
+                    <!-- Invoice Number -->
+                    <DataGridTextColumn Binding="{Binding InvoiceNumber}" Width="100">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="#"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                                        
+                    <!-- Date -->
+                    <DataGridTextColumn Binding="{Binding SaleDate, StringFormat={}{0:yyyy/MM/dd HH:mm}}" Width="160">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Date}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                                        
+                    <!-- Customer -->
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Customer}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Account" Width="16" Height="16" 
+                                                             VerticalAlignment="Center" Margin="0,0,8,0"
+                                                             Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock Text="{Binding Customer.Name}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Items Count -->
+                    <DataGridTextColumn Binding="{Binding Items.Count}" Width="80">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Header_Products}"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                                        
+                    <!-- Total Amount -->
+                    <DataGridTemplateColumn Width="140">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Sale_Total}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock FontWeight="Bold" Foreground="{StaticResource SuccessBrush}">
+                                    <Run Text="{Binding FinalAmount, Mode=OneWay, StringFormat={}{0:N0}}"/>
+                                    <Run Text=" "/>
+                                    <Run Text="{Binding Currency}" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Status -->
+                    <DataGridTemplateColumn Width="120">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{DynamicResource Label_Status}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Center" Background="#2010B981">
+                                    <TextBlock Text="{Binding Status}" Foreground="{StaticResource SuccessBrush}" FontSize="12" FontWeight="SemiBold"/>
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Actions -->
+                    <DataGridTemplateColumn Header="" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding DataContext.DeleteSaleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        ToolTip="{DynamicResource Action_Delete}"
+                                        Width="40" Height="40">
+                                    <materialDesign:PackIcon Kind="Delete" Width="20" Height="20"
+                                                              Foreground="{StaticResource DangerBrush}"/>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
