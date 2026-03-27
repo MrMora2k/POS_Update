@@ -33,7 +33,7 @@
                     <!-- Title -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Shape" Width="28" Height="28" 
-                                                  Foreground="{StaticResource AccentBrush}"
+                                                  Foreground="{DynamicResource AccentBrush}"
                                                   VerticalAlignment="Center"
                                                   Margin="0,0,12,0"/>
                         <TextBlock Text="{DynamicResource Categories_Title}" 
@@ -81,7 +81,7 @@
                                     CornerRadius="16" 
                                     Margin="8"
                                     Cursor="Hand"
-                                    Background="{StaticResource PrimaryGradient}">
+                                    Background="{DynamicResource PrimaryGradient}">
                                 <Border.Effect>
                                     <DropShadowEffect BlurRadius="15" ShadowDepth="3" 
                                                       Color="#000000" Opacity="0.2"/>
@@ -142,7 +142,7 @@
                                     CloseOnClickAway="True"
                                     DialogTheme="Inherit">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource BackgroundBrush}" 
+                <Border Background="{DynamicResource BackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="30"
                         MinWidth="400">
@@ -210,3 +210,4 @@
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>
+

@@ -14,7 +14,7 @@ namespace ApliqxPos.ViewModels;
 /// ViewModel for the Point of Sale screen.
 /// Handles product selection, cart management, and checkout.
 /// </summary>
-public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMessage>
+public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMessage>, IRecipient<ViewSwitchedMessage>
 {
     private IUnitOfWork _unitOfWork;
 
@@ -398,7 +398,8 @@ public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMess
         _unitOfWork = new UnitOfWork(context);
         _invoiceService = new InvoiceService();
         
-        WeakReferenceMessenger.Default.Register(this);
+        WeakReferenceMessenger.Default.Register<DataChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<ViewSwitchedMessage>(this);
 
         for (int i = 0; i < 4; i++)
         {
@@ -424,6 +425,16 @@ public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMess
         if (message.Value == DataType.Product || message.Value == DataType.Category || message.Value == DataType.Customer)
         {
             // Create fresh context to get updated data from database
+            var freshContext = new AppDbContext();
+            _unitOfWork = new UnitOfWork(freshContext);
+            _ = LoadDataAsync();
+        }
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Pos")
+        {
             var freshContext = new AppDbContext();
             _unitOfWork = new UnitOfWork(freshContext);
             _ = LoadDataAsync();
@@ -649,7 +660,20 @@ public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMess
         }
 
         var results = await _unitOfWork.Products.SearchAsync(SearchText);
-        Products = new ObservableCollection<Product>(results.Where(p => p.IsActive && p.Stock > 0));
+        var activeResults = results.Where(p => p.IsActive && p.Stock > 0).ToList();
+
+        // Feature: Auto-add to cart on exact barcode scan
+        var exactBarcodeMatch = activeResults.FirstOrDefault(p => string.Equals(p.Barcode, SearchText, StringComparison.OrdinalIgnoreCase));
+        if (exactBarcodeMatch != null)
+        {
+            AddToCart(exactBarcodeMatch);
+            SearchText = string.Empty;
+            // Clear the search results visually and reset product list
+            await LoadDataAsync();
+            return;
+        }
+
+        Products = new ObservableCollection<Product>(activeResults);
     }
 
     [RelayCommand]

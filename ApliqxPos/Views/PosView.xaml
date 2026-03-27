@@ -52,7 +52,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Header -->
-                    <Border Grid.Row="0" Background="{StaticResource AccentBrush}" Padding="16">
+                    <Border Grid.Row="0" Background="{DynamicResource AccentBrush}" Padding="16">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <materialDesign:PackIcon Kind="Receipt" Width="24" Height="24" Margin="0,0,10,0" Foreground="White"/>
                             <TextBlock Text="{DynamicResource POS_InvoicePreview}" FontWeight="Bold" FontSize="18" Foreground="White" VerticalAlignment="Center"/>
@@ -100,7 +100,7 @@
                         <Grid Margin="0,12">
                             <TextBlock Text="{DynamicResource POS_GrandTotal}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="Black"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <TextBlock Text="{Binding Total, StringFormat={}{0:N0}}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource AccentBrush}"/>
+                                <TextBlock Text="{Binding Total, StringFormat={}{0:N0}}" FontWeight="Bold" FontSize="20" Foreground="{DynamicResource AccentBrush}"/>
                                 <TextBlock Text="{DynamicResource Currency_IQD_Symbol}" VerticalAlignment="Bottom" Margin="4,0,0,4" FontSize="12" Foreground="#555"/>
                             </StackPanel>
                         </Grid>
@@ -220,7 +220,7 @@
                                         Padding="0"
                                         Width="180" Height="220"
                                         Margin="6">
-                                    <Border Background="{StaticResource CardBackgroundBrush}"
+                                    <Border Background="{DynamicResource CardBackgroundBrush}"
                                             CornerRadius="12"
                                             Padding="12">
                                         <Grid>
@@ -234,7 +234,7 @@
                                             <Border Grid.Row="0" 
                                                     Width="80" Height="80" 
                                                     CornerRadius="12"
-                                                    Background="{StaticResource GlassBrush}"
+                                                    Background="{DynamicResource GlassBrush}"
                                                     HorizontalAlignment="Center"
                                                     Margin="0,0,0,12"
                                                     ClipToBounds="True">
@@ -242,7 +242,7 @@
                                                     <!-- Fallback Icon (shown when no image) -->
                                                     <materialDesign:PackIcon Kind="Package" 
                                                                               Width="36" Height="36"
-                                                                              Foreground="{StaticResource AccentBrush}"
+                                                                              Foreground="{DynamicResource AccentBrush}"
                                                                               HorizontalAlignment="Center"
                                                                               VerticalAlignment="Center"
                                                                               Visibility="{Binding ImagePath, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Inverse}"/>
@@ -269,10 +269,10 @@
                                                 <TextBlock Text="{Binding SalePrice, StringFormat={}{0:N0}}"
                                                            FontWeight="Bold"
                                                            FontSize="16"
-                                                           Foreground="{StaticResource AccentBrush}"
+                                                           Foreground="{DynamicResource AccentBrush}"
                                                            TextAlignment="Center"/>
                                                 <TextBlock TextAlignment="Center" FontSize="11" 
-                                                           Foreground="{StaticResource TextMutedBrush}">
+                                                           Foreground="{DynamicResource TextMutedBrush}">
                                                     <Run Text="{DynamicResource Product_Stock}"/>
                                                     <Run Text=": "/>
                                                     <Run Text="{Binding Stock}"/>
@@ -293,11 +293,11 @@
                         VerticalAlignment="Center">
                     <StackPanel>
                         <materialDesign:PackIcon Kind="PackageVariant" Width="64" Height="64"
-                                                  Foreground="{StaticResource TextMutedBrush}"
+                                                  Foreground="{DynamicResource TextMutedBrush}"
                                                   HorizontalAlignment="Center"/>
                         <TextBlock Text="{DynamicResource NoProducts}" 
                                    Style="{StaticResource SubheaderText}"
-                                   Foreground="{StaticResource TextMutedBrush}"
+                                   Foreground="{DynamicResource TextMutedBrush}"
                                    HorizontalAlignment="Center"
                                    Margin="0,16,0,0"/>
                     </StackPanel>
@@ -322,7 +322,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Row 0: Restaurant Mode Controls -->
-                    <Border Grid.Row="0" Margin="0,0,0,8" Padding="8" Background="{StaticResource SurfaceBrush}" CornerRadius="0,0,12,12"
+                    <Border Grid.Row="0" Margin="0,0,0,8" Padding="8" Background="{DynamicResource SurfaceBrush}" CornerRadius="0,0,12,12"
                             Visibility="{Binding IsRestaurantMode, Converter={StaticResource BoolToVis}}">
                         <StackPanel>
                             <!-- Order Type Selection -->
@@ -438,7 +438,7 @@
                     </UniformGrid>
                     
                     <!-- Cart Header -->
-                    <Border Grid.Row="3" Padding="20,16" Background="{StaticResource GlassBrush}"
+                    <Border Grid.Row="3" Padding="20,16" Background="{DynamicResource GlassBrush}"
                             CornerRadius="16,16,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -448,12 +448,12 @@
                             
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Cart" Width="24" Height="24" 
-                                                          Foreground="{StaticResource AccentBrush}"
+                                                          Foreground="{DynamicResource AccentBrush}"
                                                           VerticalAlignment="Center"/>
                                 <TextBlock Text="{DynamicResource Cart}" 
                                            Style="{StaticResource SubheaderText}"
                                            Margin="12,0,0,0"/>
-                                <Border Background="{StaticResource AccentBrush}" 
+                                <Border Background="{DynamicResource AccentBrush}" 
                                         CornerRadius="10"
                                         Padding="8,2"
                                         Margin="8,0,0,0"
@@ -469,7 +469,7 @@
                                     Style="{StaticResource MaterialDesignIconButton}"
                                     ToolTip="{DynamicResource ClearCart}">
                                 <materialDesign:PackIcon Kind="DeleteOutline" Width="20" Height="20"
-                                                          Foreground="{StaticResource DangerBrush}"/>
+                                                          Foreground="{DynamicResource DangerBrush}"/>
                             </Button>
                         </Grid>
                     </Border>
@@ -479,7 +479,7 @@
                         <ItemsControl ItemsSource="{Binding CartItems}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="{StaticResource SurfaceBrush}"
+                                    <Border Background="{DynamicResource SurfaceBrush}"
                                             CornerRadius="10"
                                             Padding="12"
                                             Margin="0,4">
@@ -493,14 +493,14 @@
                                                 <TextBlock Text="{Binding ProductName}" 
                                                            FontWeight="SemiBold"
                                                            TextTrimming="CharacterEllipsis"/>
-                                                <TextBlock FontSize="12" Foreground="{StaticResource TextMutedBrush}">
+                                                <TextBlock FontSize="12" Foreground="{DynamicResource TextMutedBrush}">
                                                     <Run Text="{Binding UnitPrice, StringFormat={}{0:N0}}"/>
                                                     <Run Text=" × "/>
                                                     <Run Text="{Binding Quantity}"/>
                                                 </TextBlock>
                                                 <TextBlock Text="{Binding Subtotal, StringFormat={}{0:N0}}"
                                                            FontWeight="Bold"
-                                                           Foreground="{StaticResource AccentBrush}"/>
+                                                           Foreground="{DynamicResource AccentBrush}"/>
                                             </StackPanel>
                                             
                                             <StackPanel Grid.Column="1" Orientation="Horizontal"
@@ -542,7 +542,7 @@
                                                         Width="32" Height="32"
                                                         Margin="8,0,0,0">
                                                     <materialDesign:PackIcon Kind="Close" Width="16" Height="16"
-                                                                              Foreground="{StaticResource DangerBrush}"/>
+                                                                              Foreground="{DynamicResource DangerBrush}"/>
                                                 </Button>
                                             </StackPanel>
                                         </Grid>
@@ -559,17 +559,17 @@
                             VerticalAlignment="Center">
                         <StackPanel>
                             <materialDesign:PackIcon Kind="CartOutline" Width="48" Height="48"
-                                                      Foreground="{StaticResource TextMutedBrush}"
+                                                      Foreground="{DynamicResource TextMutedBrush}"
                                                       HorizontalAlignment="Center"/>
                             <TextBlock Text="{DynamicResource CartEmpty}" 
-                                       Foreground="{StaticResource TextMutedBrush}"
+                                       Foreground="{DynamicResource TextMutedBrush}"
                                        HorizontalAlignment="Center"
                                        Margin="0,12,0,0"/>
                         </StackPanel>
                     </Border>
                     
                     <!-- Totals -->
-                    <Border Grid.Row="5" Padding="16" Background="{StaticResource SurfaceBrush}">
+                    <Border Grid.Row="5" Padding="16" Background="{DynamicResource SurfaceBrush}">
                         <StackPanel>
                             <!-- Subtotal -->
                             <Grid Margin="0,4">
@@ -578,7 +578,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Subtotal}" 
-                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 <TextBlock Grid.Column="1" 
                                            Text="{Binding Subtotal, StringFormat={}{0:N0}}"
                                            FontWeight="SemiBold"/>
@@ -592,10 +592,10 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Discount}" 
                                            VerticalAlignment="Center"
-                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 <TextBox Grid.Column="1" 
                                          Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}"
-                                         Foreground="{StaticResource DangerBrush}"
+                                         Foreground="{DynamicResource DangerBrush}"
                                          FontWeight="Bold"
                                          Width="80"
                                          HorizontalContentAlignment="Right"
@@ -610,10 +610,10 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="الواصل (اختياري)" 
                                            VerticalAlignment="Center"
-                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 <TextBox Grid.Column="1" 
                                          Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"
-                                         Foreground="{StaticResource SuccessBrush}"
+                                         Foreground="{DynamicResource SuccessBrush}"
                                          FontWeight="Bold"
                                          Width="80"
                                          HorizontalContentAlignment="Right"
@@ -621,7 +621,7 @@
                                          Style="{StaticResource MaterialDesignTextBox}"/>
                             </Grid>
                             
-                            <Separator Margin="0,8" Background="{StaticResource GlassBorderBrush}"/>
+                            <Separator Margin="0,8" Background="{DynamicResource GlassBorderBrush}"/>
                             
                             <!-- Total -->
                             <Grid Margin="0,4">
@@ -636,7 +636,7 @@
                                                Style="{StaticResource PriceText}"
                                                FontSize="22"/>
                                     <TextBlock Text=" د.ع" 
-                                               Foreground="{StaticResource TextMutedBrush}"
+                                               Foreground="{DynamicResource TextMutedBrush}"
                                                VerticalAlignment="Bottom"
                                                Margin="4,0,0,4"/>
                                 </StackPanel>
@@ -704,3 +704,4 @@
         </Grid>
     </materialDesign:DialogHost>
 </UserControl>
+

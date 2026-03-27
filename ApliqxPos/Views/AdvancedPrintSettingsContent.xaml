@@ -22,7 +22,7 @@
             <Border Grid.Row="0" Background="#2A2A57" CornerRadius="12" Padding="20" Margin="0,0,0,20">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="PrinterSettings" Width="32" Height="32" 
-                                              Foreground="{StaticResource AccentBrush}"
+                                              Foreground="{DynamicResource AccentBrush}"
                                               VerticalAlignment="Center"
                                               Margin="0,0,16,0"/>
                     <TextBlock Text="{DynamicResource Settings_AdvancedPrint}" 
@@ -94,7 +94,7 @@
                                     <Button Grid.Column="1"
                                             Command="{Binding BrowseLogoCommand}"
                                             Style="{StaticResource MaterialDesignIconButton}"
-                                            Foreground="{StaticResource AccentBrush}"
+                                            Foreground="{DynamicResource AccentBrush}"
                                             Margin="8,0,0,0">
                                         <materialDesign:PackIcon Kind="FolderImage" Width="24" Height="24"/>
                                     </Button>
@@ -148,8 +148,9 @@
                         Content="{DynamicResource Action_SaveAndClose}" 
                         Padding="32,8"
                         Style="{StaticResource MaterialDesignRaisedButton}" 
-                        Background="{StaticResource PrimaryGradient}"/>
+                        Background="{DynamicResource PrimaryGradient}"/>
             </StackPanel>
         </Grid>
     </Border>
 </UserControl>
+

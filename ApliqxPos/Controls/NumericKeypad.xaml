@@ -13,20 +13,20 @@
             <Setter Property="Margin" Value="4"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
             <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="12"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource GlassBrush}"/>
-                    <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="Background" Value="{DynamicResource GlassBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
-    <Border Background="{StaticResource CardBackgroundBrush}"
-            BorderBrush="{StaticResource GlassBorderBrush}"
+    <Border Background="{DynamicResource CardBackgroundBrush}"
+            BorderBrush="{DynamicResource GlassBorderBrush}"
             BorderThickness="1"
             CornerRadius="16"
             Padding="12"
@@ -68,7 +68,7 @@
                     <Button Content="8" Style="{StaticResource KeypadButton}" Click="Btn_Click"/>
                     <Button Content="9" Style="{StaticResource KeypadButton}" Click="Btn_Click"/>
                     
-                    <Button Content="C" Style="{StaticResource KeypadButton}" Click="Btn_Clear" Foreground="{StaticResource DangerBrush}"/>
+                    <Button Content="C" Style="{StaticResource KeypadButton}" Click="Btn_Clear" Foreground="{DynamicResource DangerBrush}"/>
                     <Button Content="0" Style="{StaticResource KeypadButton}" Click="Btn_Click"/>
                     <Button Style="{StaticResource KeypadButton}" Click="Btn_Backspace">
                         <materialDesign:PackIcon Kind="BackspaceOutline" Width="20" Height="20"/>
@@ -83,20 +83,21 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,0,0">
-                    <materialDesign:PackIcon Kind="Numeric" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"/>
+                    <materialDesign:PackIcon Kind="Numeric" Foreground="{DynamicResource AccentBrush}" VerticalAlignment="Center"/>
                     <TextBlock Text="كمية المنتج" 
                                FontWeight="SemiBold" 
-                               Foreground="{StaticResource TextSecondaryBrush}"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
                                Margin="8,0,0,0"/>
                 </StackPanel>
                 
                 <Button Grid.Column="1" 
                         Click="Btn_Done"
                         Style="{StaticResource MaterialDesignIconButton}" 
-                        Foreground="{StaticResource AccentBrush}">
+                        Foreground="{DynamicResource AccentBrush}">
                     <materialDesign:PackIcon Kind="CheckBold" Width="24" Height="24"/>
                 </Button>
             </Grid>
         </Grid>
     </Border>
 </UserControl>
+

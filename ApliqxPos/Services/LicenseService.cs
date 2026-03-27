@@ -16,7 +16,7 @@ public class LicenseService
     private static readonly Lazy<LicenseService> _instance = new(() => new LicenseService());
     public static LicenseService Instance => _instance.Value;
 
-    private readonly string _licenseFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "license.dat");
+    private readonly string _licenseFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ApliqxPos", "license.dat");
     private readonly string _supabaseUrl = "https://hdwioskrgvkzwvkbgjqf.supabase.co";
     private readonly string _supabaseKey = "sb_publishable_pCIZJH1eNxu6jiZZOt0nsg_OYVOfHQY";
     
@@ -44,7 +44,7 @@ public class LicenseService
         try
         {
             var encryptedData = File.ReadAllBytes(_licenseFile);
-            var decryptedData = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.LocalMachine);
+            var decryptedData = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
             var licenseData = Encoding.UTF8.GetString(decryptedData);
             
             var parts = licenseData.Split('|');
@@ -139,9 +139,15 @@ public class LicenseService
 
     private void SaveLicenseLocally(string key, string machineId)
     {
+        var dir = Path.GetDirectoryName(_licenseFile);
+        if (dir != null && !Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
         var data = $"{key}|{machineId}";
         var bytes = Encoding.UTF8.GetBytes(data);
-        var encrypted = ProtectedData.Protect(bytes, null, DataProtectionScope.LocalMachine);
+        var encrypted = ProtectedData.Protect(bytes, null, DataProtectionScope.CurrentUser);
         File.WriteAllBytes(_licenseFile, encrypted);
     }
 
@@ -152,11 +158,15 @@ public class LicenseService
         try
         {
             var mac = NetworkInterface.GetAllNetworkInterfaces()
-                .Where(n => n.OperationalStatus == OperationalStatus.Up && n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
+                .Where(n => n.NetworkInterfaceType != NetworkInterfaceType.Loopback && n.GetPhysicalAddress().GetAddressBytes().Length > 0)
+                .OrderBy(n => n.Id)
                 .Select(n => n.GetPhysicalAddress().ToString())
                 .FirstOrDefault();
 
-            if (string.IsNullOrEmpty(mac)) return "NO-MAC-ADDRESS";
+            if (string.IsNullOrEmpty(mac)) 
+            {
+                mac = Environment.MachineName;
+            }
             
             // Hash it to look like a proper ID
             using var sha = SHA256.Create();

@@ -28,6 +28,18 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isDarkTheme = true;
 
+    public bool IsLightTheme => ThemeService.Instance.ActivePreset == "Light";
+    public bool IsTurquoiseTheme => ThemeService.Instance.ActivePreset == "Turquoise";
+
+    [RelayCommand]
+    private void ApplyThemePreset(string preset)
+    {
+        ThemeService.Instance.ApplyThemePreset(preset);
+        IsDarkTheme = preset == "Dark";
+        OnPropertyChanged(nameof(IsLightTheme));
+        OnPropertyChanged(nameof(IsTurquoiseTheme));
+    }
+
     public bool IsRestaurantMode
     {
         get => ThemeService.Instance.IsRestaurantMode;

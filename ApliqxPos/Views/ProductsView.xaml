@@ -84,7 +84,7 @@
                       BorderThickness="0"
                       Background="Transparent"
                       RowBackground="Transparent"
-                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      AlternatingRowBackground="{DynamicResource SurfaceBrush}"
                       RowStyle="{StaticResource PremiumDataGridRow}"
                       CellStyle="{StaticResource PremiumDataGridCell}"
                       FlowDirection="LeftToRight">
@@ -102,7 +102,7 @@
                                 <StackPanel Margin="12,8">
                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
                                     <TextBlock Text="{Binding NameAr}" FontSize="12" 
-                                               Foreground="{StaticResource TextMutedBrush}"
+                                               Foreground="{DynamicResource TextMutedBrush}"
                                                Visibility="{Binding NameAr, Converter={StaticResource NullToVisibilityConverter}}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -140,7 +140,7 @@
                                     <Run Text="{Binding CostPrice, StringFormat={}{0:N0}}"/>
                                     <Run Text=" " />
                                     <Run Text="{Binding Currency}" FontSize="11" 
-                                         Foreground="{StaticResource TextMutedBrush}"/>
+                                         Foreground="{DynamicResource TextMutedBrush}"/>
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -155,7 +155,7 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="12,0" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold">
+                                <TextBlock Margin="12,0" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold">
                                     <Run Text="{Binding SalePrice, StringFormat={}{0:N0}}"/>
                                     <Run Text=" " />
                                     <Run Text="{Binding Currency}" FontSize="11"/>
@@ -194,7 +194,7 @@
                                             ToolTip="{DynamicResource Action_Edit}"
                                             Width="36" Height="36">
                                         <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"
-                                                                  Foreground="{StaticResource AccentBrush}"/>
+                                                                  Foreground="{DynamicResource AccentBrush}"/>
                                     </Button>
                                     <Button Command="{Binding DataContext.DeleteProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
@@ -202,7 +202,7 @@
                                             ToolTip="{DynamicResource Action_Delete}"
                                             Width="36" Height="36">
                                         <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"
-                                                                  Foreground="{StaticResource DangerBrush}"/>
+                                                                  Foreground="{DynamicResource DangerBrush}"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -217,7 +217,7 @@
                                     DialogTheme="Inherit"
                                     CloseOnClickAway="True">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource CardBackgroundBrush}" 
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="24"
                         MinWidth="500">
@@ -303,7 +303,7 @@
                                     <TextBlock Text="منتج بالوزن" 
                                                VerticalAlignment="Center"
                                                Margin="8,0,0,0"
-                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                               Foreground="{DynamicResource TextSecondaryBrush}"/>
                                 </StackPanel>
                             </UniformGrid>
                             
@@ -311,7 +311,7 @@
                             <Border Margin="0,12,0,0" 
                                     Padding="12" 
                                     CornerRadius="8" 
-                                    Background="{StaticResource SurfaceBrush}">
+                                    Background="{DynamicResource SurfaceBrush}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -323,8 +323,8 @@
                                     <Border Grid.Column="0" 
                                             Width="60" Height="60" 
                                             CornerRadius="8" 
-                                            Background="{StaticResource CardBackgroundBrush}"
-                                            BorderBrush="{StaticResource TextMutedBrush}"
+                                            Background="{DynamicResource CardBackgroundBrush}"
+                                            BorderBrush="{DynamicResource TextMutedBrush}"
                                             BorderThickness="1">
                                         <Grid>
                                             <!-- Placeholder Icon -->
@@ -332,7 +332,7 @@
                                                                       Width="24" Height="24" 
                                                                       HorizontalAlignment="Center" 
                                                                       VerticalAlignment="Center"
-                                                                      Foreground="{StaticResource TextMutedBrush}"
+                                                                      Foreground="{DynamicResource TextMutedBrush}"
                                                                       Visibility="{Binding ProductImagePath, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Inverse}"/>
                                             <!-- Actual Image -->
                                             <Image Source="{Binding ProductImagePath}" 
@@ -346,7 +346,7 @@
                                                Text="{Binding ProductImagePath, TargetNullValue='لم يتم اختيار صورة'}"
                                                VerticalAlignment="Center"
                                                Margin="12,0"
-                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
                                                TextTrimming="CharacterEllipsis"/>
                                     
                                     <!-- Buttons -->
@@ -354,13 +354,13 @@
                                         <Button Command="{Binding SelectImageCommand}"
                                                 Style="{StaticResource MaterialDesignIconButton}"
                                                 ToolTip="اختر صورة">
-                                            <materialDesign:PackIcon Kind="FolderImage" Foreground="{StaticResource AccentBrush}"/>
+                                            <materialDesign:PackIcon Kind="FolderImage" Foreground="{DynamicResource AccentBrush}"/>
                                         </Button>
                                         <Button Command="{Binding ClearImageCommand}"
                                                 Style="{StaticResource MaterialDesignIconButton}"
                                                 ToolTip="مسح الصورة"
                                                 Visibility="{Binding ProductImagePath, Converter={StaticResource NullToVisibilityConverter}}">
-                                            <materialDesign:PackIcon Kind="Close" Foreground="{StaticResource DangerBrush}"/>
+                                            <materialDesign:PackIcon Kind="Close" Foreground="{DynamicResource DangerBrush}"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -383,3 +383,4 @@
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>
+

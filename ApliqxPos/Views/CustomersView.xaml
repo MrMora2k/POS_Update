@@ -83,7 +83,7 @@
                       BorderThickness="0"
                       Background="Transparent"
                       RowBackground="Transparent"
-                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      AlternatingRowBackground="{DynamicResource SurfaceBrush}"
                       RowStyle="{StaticResource PremiumDataGridRow}"
                       CellStyle="{StaticResource PremiumDataGridCell}"
                       FlowDirection="LeftToRight">
@@ -101,7 +101,7 @@
                                 <StackPanel Margin="12,8" Orientation="Horizontal">
                                     <!-- Avatar -->
                                     <Border Width="40" Height="40" CornerRadius="20" 
-                                            Background="{StaticResource PrimaryGradient}"
+                                            Background="{DynamicResource PrimaryGradient}"
                                             Margin="0,0,12,0">
                                         <TextBlock Text="{Binding Name[0]}" 
                                                    FontSize="16" FontWeight="Bold"
@@ -112,7 +112,7 @@
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
                                         <TextBlock Text="{Binding Phone}" FontSize="12" 
-                                                   Foreground="{StaticResource TextMutedBrush}"/>
+                                                   Foreground="{DynamicResource TextMutedBrush}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
@@ -149,7 +149,7 @@
                                 <TextBlock Margin="12,0">
                                     <Run Text="{Binding DebtLimit, StringFormat={}{0:N0}}"/>
                                     <Run Text=" د.ع" FontSize="11" 
-                                         Foreground="{StaticResource TextMutedBrush}"/>
+                                         Foreground="{DynamicResource TextMutedBrush}"/>
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -188,7 +188,7 @@
                                             Width="36" Height="36"
                                             Visibility="{Binding CurrentDebt, Converter={StaticResource DebtToVisibilityConverter}}">
                                         <materialDesign:PackIcon Kind="CashMultiple" Width="18" Height="18"
-                                                                  Foreground="{StaticResource SuccessBrush}"/>
+                                                                  Foreground="{DynamicResource SuccessBrush}"/>
                                     </Button>
                                     <!-- Edit -->
                                     <Button Command="{Binding DataContext.OpenEditDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -197,7 +197,7 @@
                                             ToolTip="{DynamicResource Action_Edit}"
                                             Width="36" Height="36">
                                         <materialDesign:PackIcon Kind="Pencil" Width="18" Height="18"
-                                                                  Foreground="{StaticResource AccentBrush}"/>
+                                                                  Foreground="{DynamicResource AccentBrush}"/>
                                     </Button>
                                     <!-- Delete -->
                                     <Button Command="{Binding DataContext.DeleteCustomerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -206,7 +206,7 @@
                                             ToolTip="{DynamicResource Action_Delete}"
                                             Width="36" Height="36">
                                         <materialDesign:PackIcon Kind="Delete" Width="18" Height="18"
-                                                                  Foreground="{StaticResource DangerBrush}"/>
+                                                                  Foreground="{DynamicResource DangerBrush}"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -221,7 +221,7 @@
                                     DialogTheme="Inherit"
                                     CloseOnClickAway="True">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource CardBackgroundBrush}" 
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="24"
                         MinWidth="450">
@@ -293,7 +293,7 @@
                                     DialogTheme="Inherit"
                                     CloseOnClickAway="True">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource CardBackgroundBrush}" 
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="24"
                         MinWidth="400">
@@ -313,7 +313,7 @@
                         
                         <!-- Current Debt Display -->
                         <Border Grid.Row="1" 
-                                Background="{StaticResource SurfaceBrush}" 
+                                Background="{DynamicResource SurfaceBrush}" 
                                 CornerRadius="12" 
                                 Padding="16"
                                 Margin="0,0,0,20">
@@ -322,9 +322,9 @@
                                            FontWeight="Bold" FontSize="16"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                                     <TextBlock Text="{DynamicResource Customer_CurrentDebt}" 
-                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
                                                Margin="0,0,8,0"/>
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource DangerBrush}">
+                                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource DangerBrush}">
                                         <Run Text="{Binding SelectedCustomer.CurrentDebt, StringFormat={}{0:N0}}"/>
                                         <Run Text=" د.ع"/>
                                     </TextBlock>
@@ -367,3 +367,4 @@
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>
+

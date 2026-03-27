@@ -1,6 +1,7 @@
 using Octokit;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
 
@@ -52,11 +53,11 @@ public class UpdateService
             
             if (latestVersion > currentVersion)
             {
-                // Find the .exe asset in the release
-                var exeAsset = latestRelease.Assets
-                    .FirstOrDefault(a => a.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase));
+                // Find the .zip asset in the release instead of .exe
+                var zipAsset = latestRelease.Assets
+                    .FirstOrDefault(a => a.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase));
 
-                return (true, latestRelease.TagName, exeAsset?.BrowserDownloadUrl, latestRelease.Body);
+                return (true, latestRelease.TagName, zipAsset?.BrowserDownloadUrl, latestRelease.Body);
             }
 
             return (false, null, null, null);
@@ -69,13 +70,13 @@ public class UpdateService
     }
 
     /// <summary>
-    /// Downloads the new version .exe from GitHub and returns the path to the downloaded file.
+    /// Downloads the new version .zip from GitHub and returns the path to the downloaded file.
     /// </summary>
     public async Task<string?> DownloadUpdateAsync(string downloadUrl, IProgress<int>? progress = null)
     {
         try
         {
-            var tempPath = Path.Combine(Path.GetTempPath(), $"ApliqxPos_Update.exe");
+            var tempPath = Path.Combine(Path.GetTempPath(), "ApliqxPos_Update.zip");
 
             using var http = new HttpClient();
             http.DefaultRequestHeaders.UserAgent.ParseAdd(AppName);
@@ -110,25 +111,46 @@ public class UpdateService
     }
 
     /// <summary>
-    /// Applies the downloaded update by creating a batch script, then closing the app.
-    /// The script replaces the current .exe with the new one and restarts the app.
+    /// Extracts the downloaded ZIP and creates a batch script to replace current files and restart.
     /// </summary>
-    public void ApplyUpdate(string downloadedFilePath)
+    public void ApplyUpdate(string downloadedZipPath)
     {
         var currentExePath = Process.GetCurrentProcess().MainModule?.FileName;
-        if (currentExePath == null) return;
+        var currentDir = Path.GetDirectoryName(currentExePath);
+        if (currentExePath == null || currentDir == null) return;
+
+        // Path to extract the ZIP files
+        var extractPath = Path.Combine(Path.GetTempPath(), "ApliqxPos_ExtractedUpdate");
+        
+        try
+        {
+            if (Directory.Exists(extractPath))
+            {
+                Directory.Delete(extractPath, true);
+            }
+            
+            // Extract downloaded ZIP to the temp folder
+            ZipFile.ExtractToDirectory(downloadedZipPath, extractPath, overwriteFiles: true);
+        }
+        catch
+        {
+            // If extraction fails, abort update
+            return;
+        }
 
         var batPath = Path.Combine(Path.GetTempPath(), "apliqxpos_updater.bat");
 
         // The batch script:
         // 1. Waits 2 seconds for the app to fully close
-        // 2. Copies the new file over the old one
+        // 2. Copies the extracted files to the application directory (overwriting old files)
         // 3. Restarts the app
-        // 4. Deletes itself
+        // 4. Deletes itself and cleanup
         var batContent = $@"@echo off
 timeout /t 2 /nobreak > nul
-copy /y ""{downloadedFilePath}"" ""{currentExePath}"" > nul
+xcopy /y /s /e /c ""{extractPath}\*"" ""{currentDir}\"" > nul
 start """" ""{currentExePath}""
+del /q ""{downloadedZipPath}""
+rmdir /s /q ""{extractPath}""
 del ""{batPath}""
 ";
         File.WriteAllText(batPath, batContent);

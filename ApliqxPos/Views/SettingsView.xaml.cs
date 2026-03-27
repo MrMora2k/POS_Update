@@ -30,4 +30,20 @@ public partial class SettingsView : UserControl
             MessageBox.Show($"خطأ في فتح نافذة الإعدادات: {ex.Message}", "خطأ");
         }
     }
+
+    private void OpenThemeCustomization_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var window = new ThemeCustomizationWindow
+            {
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"خطأ في فتح نافذة تخصيص الألوان: {ex.Message}", "خطأ");
+        }
+    }
 }

@@ -33,18 +33,18 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource WarningGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource WarningGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="CreditCardCheck" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Report_TotalDebts}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock FontSize="28" FontWeight="Bold" 
                                Margin="0,12,0,0"
-                               Foreground="{StaticResource WarningBrush}">
+                               Foreground="{DynamicResource WarningBrush}">
                         <Run Text="{Binding TotalDebt, StringFormat={}{0:N0}}"/>
                         <Run Text=" د.ع" FontSize="14"/>
                     </TextBlock>
@@ -56,14 +56,14 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource PrimaryGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource PrimaryGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="AccountGroup" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Debts_DebtorCount}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding Debtors.Count}" 
                                FontSize="28" FontWeight="Bold" 
@@ -114,7 +114,7 @@
                       BorderThickness="0"
                       Background="Transparent"
                       RowBackground="Transparent"
-                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      AlternatingRowBackground="{DynamicResource SurfaceBrush}"
                       RowStyle="{StaticResource PremiumDataGridRow}"
                       CellStyle="{StaticResource PremiumDataGridCell}"
                       FlowDirection="LeftToRight">
@@ -132,7 +132,7 @@
                                 <StackPanel Margin="12,8">
                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
                                     <TextBlock Text="{Binding Phone}" FontSize="12" 
-                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                               Foreground="{DynamicResource TextMutedBrush}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -165,10 +165,30 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Center" Background="#20F59E0B">
-                                    <TextBlock FontWeight="Bold" Foreground="{StaticResource WarningBrush}">
-                                        <Run Text="{Binding CurrentDebt, StringFormat={}{0:N0}}"/>
-                                        <Run Text=" د.ع" FontSize="11"/>
+                                <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Center">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#20F59E0B"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CurrentDebt}" Value="0">
+                                                    <Setter Property="Background" Value="#2010B981" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
+                                                <Setter Property="Text" Value="{Binding CurrentDebt, StringFormat={}{0:N0} د.ع}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CurrentDebt}" Value="0">
+                                                        <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+                                                        <Setter Property="Text" Value="تم سداد الدين" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
                                     </TextBlock>
                                 </Border>
                             </DataTemplate>
@@ -186,8 +206,8 @@
                                         Padding="12,0"
                                         materialDesign:ButtonAssist.CornerRadius="8"
                                         Content="{DynamicResource Customer_PayDebt}"
-                                        BorderBrush="{StaticResource SuccessBrush}"
-                                        Foreground="{StaticResource SuccessBrush}"/>
+                                        BorderBrush="{DynamicResource SuccessBrush}"
+                                        Foreground="{DynamicResource SuccessBrush}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -201,7 +221,7 @@
                                     CloseOnClickAway="True"
                                     Grid.RowSpan="3">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource CardBackgroundBrush}" 
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="24"
                         MinWidth="400">
@@ -297,7 +317,7 @@
                                         DialogTheme="Inherit"
                                         CloseOnClickAway="True">
                 <materialDesign:DialogHost.DialogContent>
-                    <Border Background="{StaticResource CardBackgroundBrush}" 
+                    <Border Background="{DynamicResource CardBackgroundBrush}" 
                             CornerRadius="16" 
                             Padding="24"
                             MinWidth="350">
@@ -315,7 +335,7 @@
                                        
                             <StackPanel Grid.Row="1" Margin="0,0,0,16">
                                 <TextBlock Text="{Binding SelectedDebtor.Name}" FontWeight="Bold" Margin="0,0,0,8"/>
-                                <TextBlock Foreground="{StaticResource WarningBrush}">
+                                <TextBlock Foreground="{DynamicResource WarningBrush}">
                                     <Run Text="الدين الحالي: "/>
                                     <Run Text="{Binding SelectedDebtor.CurrentDebt, StringFormat={}{0:N0}}"/>
                                 </TextBlock>
@@ -348,3 +368,4 @@
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>
+

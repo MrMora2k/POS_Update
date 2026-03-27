@@ -34,14 +34,14 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource PrimaryGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource PrimaryGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="Package" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Nav_Products}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding TotalProducts}" 
                                FontSize="28" FontWeight="Bold" 
@@ -54,18 +54,18 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource WarningGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource WarningGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="AlertCircle" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Inventory_LowStock}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding LowStockCount}" 
                                FontSize="28" FontWeight="Bold" 
-                               Foreground="{StaticResource WarningBrush}"
+                               Foreground="{DynamicResource WarningBrush}"
                                Margin="0,12,0,0"/>
                 </StackPanel>
             </Border>
@@ -88,11 +88,11 @@
                         </Border>
                         <TextBlock Text="{DynamicResource Inventory_OutOfStock}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding OutOfStockCount}" 
                                FontSize="28" FontWeight="Bold" 
-                               Foreground="{StaticResource DangerBrush}"
+                               Foreground="{DynamicResource DangerBrush}"
                                Margin="0,12,0,0"/>
                 </StackPanel>
             </Border>
@@ -102,17 +102,17 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource SuccessGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource SuccessGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="CurrencyUsd" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Inventory_StockValue}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock FontSize="24" FontWeight="Bold" 
-                               Foreground="{StaticResource SuccessBrush}"
+                               Foreground="{DynamicResource SuccessBrush}"
                                Margin="0,12,0,0">
                         <Run Text="{Binding TotalInventoryValue, StringFormat={}{0:N0}}"/>
                         <Run Text=" د.ع" FontSize="14"/>
@@ -172,7 +172,7 @@
                             Visibility="{Binding SelectedCategory, Converter={StaticResource NullToVisibilityConverter}}"
                             Margin="0,0,12,0"
                             ToolTip="إلغاء الفلتر">
-                        <materialDesign:PackIcon Kind="Close" Foreground="{StaticResource TextSecondaryBrush}"/>
+                        <materialDesign:PackIcon Kind="Close" Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </Button>
                 </Grid>
                 
@@ -189,12 +189,12 @@
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                             <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource TextSecondaryBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextSecondaryBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowLowStockOnly}" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
-                                    <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                                     <Setter Property="Foreground" Value="White"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -219,12 +219,12 @@
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
                             <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource TextSecondaryBrush}"/>
-                            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource TextSecondaryBrush}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ShowOutOfStockOnly}" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource DangerBrush}"/> <!-- Different color for OutOfStock -->
-                                    <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+                                    <Setter Property="Background" Value="{DynamicResource DangerBrush}"/> <!-- Different color for OutOfStock -->
+                                    <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
                                     <Setter Property="Foreground" Value="White"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -251,7 +251,7 @@
                       BorderThickness="0"
                       Background="Transparent"
                       RowBackground="Transparent"
-                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      AlternatingRowBackground="{DynamicResource SurfaceBrush}"
                       RowStyle="{StaticResource PremiumDataGridRow}"
                       CellStyle="{StaticResource PremiumDataGridCell}"
                       FlowDirection="LeftToRight">
@@ -269,7 +269,7 @@
                                 <StackPanel Margin="12,8">
                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"/>
                                     <TextBlock Text="{Binding Barcode}" FontSize="12" 
-                                               Foreground="{StaticResource TextMutedBrush}"/>
+                                               Foreground="{DynamicResource TextMutedBrush}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -343,7 +343,7 @@
                                     <Run Text="{Binding CostPrice, StringFormat={}{0:N0}}"/>
                                     <Run Text=" " />
                                     <Run Text="{Binding Currency}" FontSize="11" 
-                                         Foreground="{StaticResource TextMutedBrush}"/>
+                                         Foreground="{DynamicResource TextMutedBrush}"/>
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -359,7 +359,7 @@
                                         ToolTip="{DynamicResource Inventory_AdjustStock}"
                                         Width="40" Height="40">
                                     <materialDesign:PackIcon Kind="PackageVariantPlus" Width="20" Height="20"
-                                                              Foreground="{StaticResource AccentBrush}"/>
+                                                              Foreground="{DynamicResource AccentBrush}"/>
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -373,7 +373,7 @@
                                     DialogTheme="Inherit"
                                     CloseOnClickAway="True">
             <materialDesign:DialogHost.DialogContent>
-                <Border Background="{StaticResource CardBackgroundBrush}" 
+                <Border Background="{DynamicResource CardBackgroundBrush}" 
                         CornerRadius="16" 
                         Padding="24"
                         MinWidth="400">
@@ -393,7 +393,7 @@
                         
                         <!-- Product Info -->
                         <Border Grid.Row="1" 
-                                Background="{StaticResource SurfaceBrush}" 
+                                Background="{DynamicResource SurfaceBrush}" 
                                 CornerRadius="12" 
                                 Padding="16"
                                 Margin="0,0,0,20">
@@ -402,7 +402,7 @@
                                            FontWeight="Bold" FontSize="16"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                                     <TextBlock Text="{DynamicResource Inventory_Stock}" 
-                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Foreground="{DynamicResource TextSecondaryBrush}"
                                                Margin="0,0,8,0"/>
                                     <TextBlock Text="{Binding SelectedProduct.Stock}" 
                                                FontWeight="Bold"/>
@@ -452,3 +452,4 @@
         </materialDesign:DialogHost>
     </Grid>
 </UserControl>
+

@@ -34,7 +34,7 @@
                     <!-- Title -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ChartAreaspline" Width="28" Height="28" 
-                                                  Foreground="{StaticResource AccentBrush}"
+                                                  Foreground="{DynamicResource AccentBrush}"
                                                   VerticalAlignment="Center"
                                                   Margin="0,0,12,0"/>
                         <TextBlock Text="{DynamicResource Nav_Reports}" 
@@ -58,7 +58,7 @@
                                 Style="{StaticResource MaterialDesignIconButton}"
                                 ToolTip="تحديث البيانات"
                                 Margin="0,0,16,0">
-                            <materialDesign:PackIcon Kind="Refresh" Foreground="{StaticResource AccentBrush}" Width="24" Height="24"/>
+                            <materialDesign:PackIcon Kind="Refresh" Foreground="{DynamicResource AccentBrush}" Width="24" Height="24"/>
                         </Button>
 
                         <Button Content="يومي"
@@ -90,13 +90,13 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="0,0,8,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource PrimaryGradient}" Margin="0,0,8,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{DynamicResource PrimaryGradient}" Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource Report_TotalSales}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock Text="{DynamicResource Report_TotalSales}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0">
-                                <Run Text="{Binding TotalSales, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
+                                <Run Text="{Binding TotalSales, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10" Foreground="{DynamicResource TextMutedBrush}"/>
                             </TextBlock>
                         </StackPanel>
                     </Grid>
@@ -106,12 +106,12 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource SuccessGradient}" Margin="0,0,8,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{DynamicResource SuccessGradient}" Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="TrendingUp" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource Report_TotalProfit}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource SuccessBrush}">
+                            <TextBlock Text="{DynamicResource Report_TotalProfit}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{DynamicResource SuccessBrush}">
                                 <Run Text="{Binding TotalProfit, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10"/>
                             </TextBlock>
                         </StackPanel>
@@ -122,11 +122,11 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource CyanGradient}" Margin="0,0,8,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{DynamicResource CyanGradient}" Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="Receipt" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{DynamicResource Report_Transactions}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock Text="{DynamicResource Report_Transactions}" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
                             <TextBlock Text="{Binding TotalTransactions}" FontSize="16" FontWeight="Bold" Margin="0,4,0,0"/>
                         </StackPanel>
                     </Grid>
@@ -136,12 +136,12 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource DangerBrush}" Margin="0,0,8,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{DynamicResource DangerBrush}" Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="Cancel" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="مرتجعات وملغاة" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock Text="{Binding TotalCancelled}" FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource DangerBrush}"/>
+                            <TextBlock Text="مرتجعات وملغاة" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock Text="{Binding TotalCancelled}" FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{DynamicResource DangerBrush}"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -150,12 +150,12 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="8,0,0,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource WarningBrush}" Margin="0,0,8,0">
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{DynamicResource WarningBrush}" Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="AccountCreditCard" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="إجمالي الديون (الفترة)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource WarningBrush}">
+                            <TextBlock Text="إجمالي الديون (الفترة)" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{DynamicResource WarningBrush}">
                                 <Run Text="{Binding TotalDebtCreated, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10"/>
                             </TextBlock>
                         </StackPanel>
@@ -261,16 +261,16 @@
                                             <Border Padding="8,4" CornerRadius="8" HorizontalAlignment="Center">
                                                 <Border.Style>
                                                     <Style TargetType="Border">
-                                                        <Setter Property="Background" Value="{StaticResource SuccessGradient}"/>
+                                                        <Setter Property="Background" Value="{DynamicResource SuccessGradient}"/>
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding Status}" Value="Cancelled">
-                                                                <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+                                                                <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Status}" Value="Refunded">
-                                                                <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+                                                                <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Status}" Value="Pending">
-                                                                <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+                                                                <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -288,3 +288,4 @@
         </Grid>
     </ScrollViewer>
 </UserControl>
+

@@ -33,18 +33,18 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource SuccessGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource SuccessGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="CashMultiple" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Report_TotalSales}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock FontSize="28" FontWeight="Bold" 
                                Margin="0,12,0,0"
-                               Foreground="{StaticResource SuccessBrush}">
+                               Foreground="{DynamicResource SuccessBrush}">
                         <Run Text="{Binding TotalRevenue, StringFormat={}{0:N0}}"/>
                         <Run Text=" د.ع" FontSize="14"/>
                     </TextBlock>
@@ -56,14 +56,14 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Border Width="40" Height="40" CornerRadius="10" 
-                                Background="{StaticResource PrimaryGradient}" Margin="0,0,12,0">
+                                Background="{DynamicResource PrimaryGradient}" Margin="0,0,12,0">
                             <materialDesign:PackIcon Kind="Receipt" Width="22" Height="22" 
                                                       Foreground="White" HorizontalAlignment="Center" 
                                                       VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Text="{DynamicResource Sales_InvoiceCount}" 
                                    VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     <TextBlock Text="{Binding Sales.Count}" 
                                FontSize="28" FontWeight="Bold" 
@@ -118,7 +118,7 @@
                       BorderThickness="0"
                       Background="Transparent"
                       RowBackground="Transparent"
-                      AlternatingRowBackground="{StaticResource SurfaceBrush}"
+                      AlternatingRowBackground="{DynamicResource SurfaceBrush}"
                       RowStyle="{StaticResource PremiumDataGridRow}"
                       CellStyle="{StaticResource PremiumDataGridCell}"
                       FlowDirection="LeftToRight">
@@ -154,7 +154,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Account" Width="16" Height="16" 
                                                              VerticalAlignment="Center" Margin="0,0,8,0"
-                                                             Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                             Foreground="{DynamicResource TextSecondaryBrush}"/>
                                     <TextBlock Text="{Binding Customer.Name}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -179,10 +179,10 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock FontWeight="Bold" Foreground="{StaticResource SuccessBrush}">
+                                <TextBlock FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}">
                                     <Run Text="{Binding FinalAmount, Mode=OneWay, StringFormat={}{0:N0}}"/>
                                     <Run Text=" "/>
-                                    <Run Text="{Binding Currency}" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                                    <Run Text="{Binding Currency}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -217,16 +217,16 @@
                                     <TextBlock Text="{Binding Status}" FontSize="12" FontWeight="SemiBold">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding Status}" Value="Pending">
-                                                        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="Cancelled">
-                                                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding Status}" Value="Refunded">
-                                                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -244,35 +244,35 @@
                                 <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" ToolTip="الإجراءات">
                                     <StackPanel MinWidth="150" Margin="0,8">
                                         <!-- Status Change Options -->
-                                        <TextBlock Text="تغيير الحالة" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="16,4,16,8"/>
+                                        <TextBlock Text="تغيير الحالة" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="16,4,16,8"/>
                                         
                                         <Button Content="✅ مكتملة (Completed)"
                                                 Command="{Binding DataContext.SetStatusCompletedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 HorizontalContentAlignment="Left"
-                                                Foreground="{StaticResource SuccessBrush}"/>
+                                                Foreground="{DynamicResource SuccessBrush}"/>
                                         
                                         <Button Content="⏳ قيد الانتظار (Pending)"
                                                 Command="{Binding DataContext.SetStatusPendingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 HorizontalContentAlignment="Left"
-                                                Foreground="{StaticResource WarningBrush}"/>
+                                                Foreground="{DynamicResource WarningBrush}"/>
                                         
                                         <Button Content="🔙 مرتجعة (Refunded)"
                                                 Command="{Binding DataContext.SetStatusRefundedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 HorizontalContentAlignment="Left"
-                                                Foreground="{StaticResource DangerBrush}"/>
+                                                Foreground="{DynamicResource DangerBrush}"/>
                                         
                                         <Button Content="❌ ملغاة (Cancelled)"
                                                 Command="{Binding DataContext.SetStatusCancelledCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 HorizontalContentAlignment="Left"
-                                                Foreground="{StaticResource DangerBrush}"/>
+                                                Foreground="{DynamicResource DangerBrush}"/>
                                         
                                         <Separator Margin="8"/>
                                         
@@ -282,7 +282,7 @@
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource MaterialDesignFlatButton}"
                                                 HorizontalContentAlignment="Left"
-                                                Foreground="{StaticResource TextMutedBrush}"/>
+                                                Foreground="{DynamicResource TextMutedBrush}"/>
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </DataTemplate>
@@ -293,3 +293,4 @@
         </Border>
     </Grid>
 </UserControl>
+

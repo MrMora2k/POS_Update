@@ -1,15 +1,17 @@
 using System.Collections.ObjectModel;
 using ApliqxPos.Data;
 using ApliqxPos.Models;
+using ApliqxPos.Messages;
 using ApliqxPos.Services;
 using ApliqxPos.Services.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Windows;
 
 namespace ApliqxPos.ViewModels;
 
-public partial class DebtsViewModel : ObservableObject
+public partial class DebtsViewModel : ObservableObject, IRecipient<ViewSwitchedMessage>
 {
     private readonly ICustomerRepository _customerRepository;
 
@@ -41,6 +43,9 @@ public partial class DebtsViewModel : ObservableObject
         {
             var context = new ApliqxPos.Data.AppDbContext();
             _customerRepository = new CustomerRepository(context);
+            
+            WeakReferenceMessenger.Default.Register(this);
+
            // Execute safely without awaiting
             _ = Task.Run(async () => 
             {
@@ -164,6 +169,10 @@ public partial class DebtsViewModel : ObservableObject
             }
             
             CloseAddDebtDialog();
+            
+            // Notify other ViewModels that a customer was added/modified
+            WeakReferenceMessenger.Default.Send(new DataChangedMessage(DataType.Customer));
+            
             await LoadDataAsync();
         }
         catch (Exception)
@@ -200,11 +209,23 @@ public partial class DebtsViewModel : ObservableObject
             await _customerRepository.UpdateDebtAsync(SelectedDebtor.Id, -PaymentAmount);
             
             CloseDialog();
+            
+            // Notify other ViewModels that a debt was paid
+            WeakReferenceMessenger.Default.Send(new DataChangedMessage(DataType.Customer));
+            
             await LoadDataAsync();
         }
         catch (Exception)
         {
             // Handle error
+        }
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Debts")
+        {
+            _ = LoadDataAsync();
         }
     }
 }

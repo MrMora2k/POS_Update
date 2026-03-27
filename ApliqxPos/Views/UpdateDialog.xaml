@@ -21,16 +21,16 @@
         <!-- Header -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
             <materialDesign:PackIcon Kind="Update" Width="32" Height="32"
-                                     Foreground="{StaticResource AccentBrush}"
+                                     Foreground="{DynamicResource AccentBrush}"
                                      VerticalAlignment="Center" Margin="0,0,12,0"/>
             <StackPanel>
                 <TextBlock Text="🎉 يوجد تحديث جديد!" FontSize="18" FontWeight="Bold"/>
-                <TextBlock Text="{Binding CurrentVersion}" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/>
+                <TextBlock Text="{Binding CurrentVersion}" Foreground="{DynamicResource TextMutedBrush}" FontSize="12"/>
             </StackPanel>
         </StackPanel>
 
         <!-- New Version Badge -->
-        <Border Grid.Row="1" Background="{StaticResource AccentBrush}" CornerRadius="8"
+        <Border Grid.Row="1" Background="{DynamicResource AccentBrush}" CornerRadius="8"
                 Padding="12,8" Margin="0,0,0,16" HorizontalAlignment="Left">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="الإصدار الجديد: " Foreground="White" FontWeight="Bold"/>
@@ -39,11 +39,11 @@
         </Border>
 
         <!-- Release Notes -->
-        <Border Grid.Row="2" Background="{StaticResource SurfaceBrush}" CornerRadius="8" Padding="12" Margin="0,0,0,16">
+        <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Padding="12" Margin="0,0,0,16">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <TextBlock Text="{Binding ReleaseNotes}"
                            FontSize="13" TextWrapping="Wrap"
-                           Foreground="{StaticResource TextMutedBrush}"/>
+                           Foreground="{DynamicResource TextMutedBrush}"/>
             </ScrollViewer>
         </Border>
 
@@ -51,7 +51,7 @@
         <StackPanel Grid.Row="3" Margin="0,0,0,16"
                     Visibility="{Binding IsDownloading, Converter={StaticResource BoolToVisibilityConverter}}">
             <TextBlock Text="{Binding StatusMessage}" FontSize="13" Margin="0,0,0,8"
-                       Foreground="{StaticResource AccentBrush}"/>
+                       Foreground="{DynamicResource AccentBrush}"/>
             <ProgressBar Value="{Binding DownloadProgress}" Maximum="100" Height="8"
                          Style="{StaticResource MaterialDesignLinearProgressBar}"/>
         </StackPanel>
@@ -65,7 +65,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" VerticalAlignment="Center"
-                       Foreground="{StaticResource TextMutedBrush}" FontSize="12"
+                       Foreground="{DynamicResource TextMutedBrush}" FontSize="12"
                        Visibility="{Binding IsDownloading, Converter={StaticResource InverseBoolToVisibilityConverter}}"/>
 
             <Button Grid.Column="1"
@@ -82,3 +82,4 @@
         </Grid>
     </Grid>
 </Window>
+

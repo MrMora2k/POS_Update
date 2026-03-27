@@ -5,6 +5,7 @@ using ApliqxPos.Services;
 using ApliqxPos.Services.Data;
 using ApliqxPos.Data;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ApliqxPos.ViewModels;
 
@@ -12,7 +13,7 @@ namespace ApliqxPos.ViewModels;
 /// ViewModel for Customers management screen.
 /// Handles CRUD operations for customers and debt management.
 /// </summary>
-public partial class CustomersViewModel : ObservableObject
+public partial class CustomersViewModel : ObservableObject, IRecipient<ViewSwitchedMessage>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -69,6 +70,8 @@ public partial class CustomersViewModel : ObservableObject
     {
         var context = new AppDbContext();
         _unitOfWork = new UnitOfWork(context);
+        
+        WeakReferenceMessenger.Default.Register(this);
         
         _ = LoadDataAsync();
     }
@@ -269,5 +272,13 @@ public partial class CustomersViewModel : ObservableObject
         CustomerDebtLimit = 0;
         PaymentAmount = 0;
         PaymentNotes = string.Empty;
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Customers")
+        {
+            _ = LoadDataAsync();
+        }
     }
 }

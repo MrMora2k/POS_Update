@@ -14,7 +14,7 @@ namespace ApliqxPos.ViewModels;
 /// ViewModel for Products management screen.
 /// Handles CRUD operations for products.
 /// </summary>
-public partial class ProductsViewModel : ObservableObject, IRecipient<DataChangedMessage>
+public partial class ProductsViewModel : ObservableObject, IRecipient<DataChangedMessage>, IRecipient<ViewSwitchedMessage>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -89,7 +89,8 @@ public partial class ProductsViewModel : ObservableObject, IRecipient<DataChange
         _unitOfWork = new UnitOfWork(context);
         
         // Register for messages
-        WeakReferenceMessenger.Default.Register(this);
+        WeakReferenceMessenger.Default.Register<DataChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<ViewSwitchedMessage>(this);
 
         // Listen to ThemeService changes
         ThemeService.Instance.PropertyChanged += (s, e) =>
@@ -113,7 +114,14 @@ public partial class ProductsViewModel : ObservableObject, IRecipient<DataChange
         // Reload if products changed from elsewhere (e.g. stock update from POS)
         else if (message.Value == DataType.Product)
         {
-            _ = LoadProductsAsync();
+        }
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Products")
+        {
+            _ = LoadDataAsync();
         }
     }
 

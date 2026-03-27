@@ -3,6 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using ApliqxPos.Services;
 using ApliqxPos.Models;
 using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
+using ApliqxPos.Services.Data;
+using ApliqxPos.Messages;
+using System.Threading.Tasks;
 
 namespace ApliqxPos.ViewModels;
 
@@ -10,7 +14,7 @@ namespace ApliqxPos.ViewModels;
 /// Main ViewModel for the application shell.
 /// Handles navigation, theme switching, and language switching.
 /// </summary>
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject, IRecipient<DataChangedMessage>
 {
     [ObservableProperty]
     private string _currentView = "Dashboard";
@@ -103,6 +107,45 @@ public partial class MainViewModel : ObservableObject
         };
         
         UpdateNavigationVisibility();
+        
+        WeakReferenceMessenger.Default.Register(this);
+        _ = LoadDashboardStatsAsync();
+    }
+
+    private async Task LoadDashboardStatsAsync()
+    {
+        try
+        {
+            var context = new ApliqxPos.Data.AppDbContext();
+            var unitOfWork = new UnitOfWork(context);
+
+            var startOfDay = DateTime.Today;
+            var endOfDay = startOfDay.AddDays(1).AddTicks(-1);
+
+            var totalSalesTask = unitOfWork.Sales.GetTotalSalesAsync(startOfDay, endOfDay);
+            var totalProfitTask = unitOfWork.Sales.GetTotalProfitAsync(startOfDay, endOfDay);
+            var customersTask = unitOfWork.Customers.GetAllAsync();
+            
+            await Task.WhenAll(totalSalesTask, totalProfitTask, customersTask);
+
+            TotalSales = "0";
+            TotalProfit = "0";
+            try { TotalSales = totalSalesTask.Result.ToString("N0"); } catch { }
+            try { TotalProfit = totalProfitTask.Result.ToString("N0"); } catch { }
+
+            var customers = customersTask.Result.ToList();
+            TotalCustomers = customers.Count;
+            TotalDebts = customers.Sum(c => c.CurrentDebt).ToString("N0");
+        }
+        catch { }
+    }
+
+    public void Receive(DataChangedMessage message)
+    {
+        if (message.Value == DataType.Sale || message.Value == DataType.Customer)
+        {
+            _ = Application.Current.Dispatcher.InvokeAsync(async () => await LoadDashboardStatsAsync());
+        }
     }
 
     [RelayCommand]
@@ -147,6 +190,7 @@ public partial class MainViewModel : ObservableObject
     {
         UpdatePageTitle();
         UpdateNavigationSelection();
+        WeakReferenceMessenger.Default.Send(new ViewSwitchedMessage(value));
     }
 
     private void UpdatePageTitle()

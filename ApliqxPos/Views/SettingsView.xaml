@@ -33,7 +33,7 @@
                     
                     <StackPanel Orientation="Horizontal" Grid.Column="0">
                         <materialDesign:PackIcon Kind="Cog" Width="28" Height="28" 
-                                               Foreground="{StaticResource AccentBrush}"
+                                               Foreground="{DynamicResource AccentBrush}"
                                                VerticalAlignment="Center"
                                                Margin="0,0,12,0"/>
                         <TextBlock Text="{DynamicResource Nav_Settings}" 
@@ -88,21 +88,49 @@
                                              FontSize="14"/>
                             </StackPanel>
                             
-                            <Separator Margin="0,0,0,20" Background="{StaticResource GlassBorderBrush}"/>
+                            <Separator Margin="0,0,0,20" Background="{DynamicResource GlassBorderBrush}"/>
                             
-                            <!-- Theme -->
+                            <!-- Theme Presets -->
                             <TextBlock Text="{DynamicResource Settings_Theme}" 
                                        Style="{StaticResource SubheaderText}"
                                        Margin="0,0,0,16"/>
-                            
-                            <StackPanel Orientation="Horizontal">
-                                <ToggleButton IsChecked="{Binding IsDarkTheme}"
-                                              Command="{Binding ToggleThemeCommand}"
-                                              Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                              Margin="0,0,12,0"/>
-                                <TextBlock Text="{DynamicResource Settings_DarkMode}" 
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
+
+                            <WrapPanel Margin="0,0,0,8">
+                                <RadioButton Content="داكن" 
+                                             IsChecked="{Binding IsDarkTheme}"
+                                             Command="{Binding ApplyThemePresetCommand}"
+                                             CommandParameter="Dark"
+                                             Style="{StaticResource MaterialDesignChoiceChipRadioButton}"
+                                             Margin="0,0,12,8" FontSize="14"/>
+                                <RadioButton Content="فاتح"
+                                             IsChecked="{Binding IsLightTheme, Mode=OneWay}"
+                                             Command="{Binding ApplyThemePresetCommand}"
+                                             CommandParameter="Light"
+                                             Style="{StaticResource MaterialDesignChoiceChipRadioButton}"
+                                             Margin="0,0,12,8" FontSize="14"/>
+                                <RadioButton Content="تركوازي"
+                                             IsChecked="{Binding IsTurquoiseTheme, Mode=OneWay}"
+                                             Command="{Binding ApplyThemePresetCommand}"
+                                             CommandParameter="Turquoise"
+                                             Style="{StaticResource MaterialDesignChoiceChipRadioButton}"
+                                             Margin="0,0,12,8" FontSize="14"/>
+                            </WrapPanel>
+
+                            <Separator Margin="0,8,0,16" Background="{DynamicResource GlassBorderBrush}"/>
+
+                            <!-- Custom Theme Colors -->
+                            <Button Click="OpenThemeCustomization_Click"
+                                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                                    HorizontalAlignment="Stretch"
+                                    Height="44" Padding="12,8">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <materialDesign:PackIcon Kind="Palette" Width="20" Height="20" 
+                                                              Margin="0,0,10,0"
+                                                              Foreground="{DynamicResource AccentBrush}"/>
+                                    <TextBlock Text="تخصيص الألوان" FontWeight="Bold" FontSize="14"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Border>
 
@@ -188,7 +216,7 @@
                                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                                  Margin="0,0,0,20"/>
                         
-                        <Separator Margin="0,0,0,20" Background="{StaticResource GlassBorderBrush}"/>
+                        <Separator Margin="0,0,0,20" Background="{DynamicResource GlassBorderBrush}"/>
                         
                         <!-- Tax Settings -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -268,7 +296,7 @@
                         <!-- Print Output Type -->
                         <StackPanel Grid.Column="0" Margin="0,0,8,0">
                             <TextBlock Text="{DynamicResource Settings_OutputType}" 
-                                       Foreground="{StaticResource TextMutedBrush}"
+                                       Foreground="{DynamicResource TextMutedBrush}"
                                        FontSize="12" Margin="0,0,0,8"/>
                              <StackPanel Orientation="Horizontal">
                                 <RadioButton Content="{DynamicResource Action_Print}"
@@ -286,7 +314,7 @@
                             
                             <!-- Paper Size selection -->
                             <TextBlock Text="{DynamicResource Settings_PaperSize}" 
-                                       Foreground="{StaticResource TextMutedBrush}"
+                                       Foreground="{DynamicResource TextMutedBrush}"
                                        FontSize="12" Margin="0,16,0,8"/>
                             <ComboBox ItemsSource="{Binding AvailablePaperSizes}"
                                       SelectedItem="{Binding ReceiptWidth}"
@@ -299,7 +327,7 @@
                             <!-- Printer Selection (visible when PrintOutputType is Printer) -->
                             <StackPanel Visibility="{Binding PrintOutputType, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter=Printer}">
                                 <TextBlock Text="{DynamicResource Settings_SelectPrinter}" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12" Margin="0,0,0,8"/>
                                 <ComboBox ItemsSource="{Binding AvailablePrinters}"
                                           SelectedItem="{Binding SelectedPrinter}"
@@ -308,7 +336,7 @@
 
                                 <!-- Kitchen Printer -->
                                 <TextBlock Text="طابعة المطبخ" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12" Margin="0,16,0,8"/>
                                 <ComboBox ItemsSource="{Binding AvailablePrinters}"
                                           SelectedItem="{Binding SelectedKitchenPrinter}"
@@ -319,7 +347,7 @@
                             <!-- PDF Path (visible when PrintOutputType is PDF) -->
                             <StackPanel Visibility="{Binding PrintOutputType, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter=PDF}">
                                 <TextBlock Text="{DynamicResource Settings_PdfFolder}" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12" Margin="0,0,0,8"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -368,7 +396,7 @@
                                Margin="0,0,0,16"/>
                     
                     <!-- Database Info -->
-                    <Border Background="{StaticResource SurfaceBrush}" 
+                    <Border Background="{DynamicResource SurfaceBrush}" 
                             CornerRadius="12" 
                             Padding="16"
                             Margin="0,0,0,20">
@@ -382,7 +410,7 @@
                             <!-- DB Size -->
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="{DynamicResource Settings_DatabaseSize}" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12"/>
                                 <TextBlock Text="{Binding DatabaseSize}" 
                                            FontSize="18" FontWeight="Bold"
@@ -392,7 +420,7 @@
                             <!-- Last Backup -->
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="{DynamicResource Settings_LastBackup}" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12"/>
                                 <TextBlock Text="{Binding LastBackup}" 
                                            FontSize="18" FontWeight="Bold"
@@ -402,7 +430,7 @@
                             <!-- DB Path -->
                             <StackPanel Grid.Column="2">
                                 <TextBlock Text="{DynamicResource Settings_DatabaseLocation}" 
-                                           Foreground="{StaticResource TextMutedBrush}"
+                                           Foreground="{DynamicResource TextMutedBrush}"
                                            FontSize="12"/>
                                 <TextBlock Text="{Binding DatabasePath}" 
                                            FontSize="12"
@@ -438,8 +466,8 @@
                         
                         <Button Command="{Binding ResetDatabaseCommand}"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Foreground="{StaticResource DangerBrush}"
-                                BorderBrush="{StaticResource DangerBrush}"
+                                Foreground="{DynamicResource DangerBrush}"
+                                BorderBrush="{DynamicResource DangerBrush}"
                                 IsEnabled="{Binding IsProcessing, Converter={StaticResource InverseBoolConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="DatabaseRemove" Width="18" Height="18" 
@@ -449,16 +477,16 @@
                         </Button>
                     </StackPanel>
 
-                    <Separator Margin="0,20" Background="{StaticResource GlassBorderBrush}"/>
+                    <Separator Margin="0,20" Background="{DynamicResource GlassBorderBrush}"/>
 
                     <!-- Check for Updates -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <materialDesign:PackIcon Kind="Update" Width="24" Height="24"
-                                                 Foreground="{StaticResource AccentBrush}"
+                                                 Foreground="{DynamicResource AccentBrush}"
                                                  VerticalAlignment="Center" Margin="0,0,12,0"/>
                         <StackPanel>
                             <TextBlock Text="تحديثات التطبيق" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding AppVersion}" Foreground="{StaticResource TextMutedBrush}" FontSize="11"/>
+                            <TextBlock Text="{Binding AppVersion}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
                         </StackPanel>
                         <Button Command="{Binding CheckForUpdatesCommand}"
                                 Style="{StaticResource MaterialDesignOutlinedButton}"
@@ -477,3 +505,4 @@
         </Grid>
         </ScrollViewer>
 </UserControl>
+

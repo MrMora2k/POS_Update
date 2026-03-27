@@ -3,11 +3,12 @@ using ApliqxPos.Models;
 using ApliqxPos.Services.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Windows;
 
 namespace ApliqxPos.ViewModels;
 
-public partial class SalesViewModel : ObservableObject
+public partial class SalesViewModel : ObservableObject, IRecipient<ViewSwitchedMessage>
 {
     private readonly ISaleRepository _saleRepository;
 
@@ -35,6 +36,9 @@ public partial class SalesViewModel : ObservableObject
         {
             var context = new ApliqxPos.Data.AppDbContext();
             _saleRepository = new SaleRepository(context);
+            
+            WeakReferenceMessenger.Default.Register(this);
+
             // Execute safely without awaiting
             _ = Task.Run(async () => 
             {
@@ -97,5 +101,13 @@ public partial class SalesViewModel : ObservableObject
         sale.Status = status;
         await _saleRepository.UpdateAsync(sale);
         await LoadDataAsync();
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Sales")
+        {
+            _ = Application.Current.Dispatcher.InvokeAsync(async () => await LoadDataAsync());
+        }
     }
 }

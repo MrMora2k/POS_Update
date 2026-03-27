@@ -65,7 +65,7 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
     {
         return await _dbSet
             .Where(s => s.SaleDate >= start && s.SaleDate <= end && s.Status != SaleStatus.Cancelled)
-            .SumAsync(s => s.TotalAmount - s.DiscountAmount);
+            .SumAsync(s => (decimal?)(s.TotalAmount - s.DiscountAmount)) ?? 0m;
     }
 
     public async Task<decimal> GetTotalProfitAsync(DateTime start, DateTime end)

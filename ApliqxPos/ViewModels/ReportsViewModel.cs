@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using ApliqxPos.Data;
 using ApliqxPos.Models;
 using ApliqxPos.Services;
@@ -17,7 +18,7 @@ namespace ApliqxPos.ViewModels;
 /// ViewModel for Reports dashboard.
 /// Displays sales statistics and business metrics.
 /// </summary>
-public partial class ReportsViewModel : ObservableObject
+public partial class ReportsViewModel : ObservableObject, IRecipient<ViewSwitchedMessage>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -87,6 +88,8 @@ public partial class ReportsViewModel : ObservableObject
     {
         var context = new AppDbContext();
         _unitOfWork = new UnitOfWork(context);
+        
+        WeakReferenceMessenger.Default.Register(this);
         
         _ = LoadDataAsync();
     }
@@ -260,5 +263,13 @@ public partial class ReportsViewModel : ObservableObject
         }
 
         await LoadDataAsync();
+    }
+
+    public void Receive(ViewSwitchedMessage message)
+    {
+        if (message.Value == "Reports")
+        {
+            _ = LoadDataAsync();
+        }
     }
 }

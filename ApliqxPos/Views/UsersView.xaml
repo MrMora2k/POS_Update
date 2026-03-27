@@ -76,3 +76,4 @@
                      Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
+
