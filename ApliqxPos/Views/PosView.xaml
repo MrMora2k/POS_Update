@@ -83,12 +83,12 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding ProductName}" TextTrimming="CharacterEllipsis" FontWeight="Medium"/>
+                                        <TextBlock Text="{Binding ProductName}" TextTrimming="CharacterEllipsis" FontWeight="Medium" Foreground="Black"/>
                                         <TextBlock Grid.Column="1" Margin="10,0" Foreground="#555">
                                             <Run Text="x"/>
                                             <Run Text="{Binding Quantity}"/>
                                         </TextBlock>
-                                        <TextBlock Grid.Column="2" Text="{Binding Subtotal, StringFormat={}{0:N0}}" FontWeight="Bold"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Subtotal, StringFormat={}{0:N0}}" FontWeight="Bold" Foreground="Black"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -98,7 +98,7 @@
                     <!-- Total -->
                     <Border Grid.Row="3" BorderBrush="#EEE" BorderThickness="0,1,0,0" Margin="20,0">
                         <Grid Margin="0,12">
-                            <TextBlock Text="{DynamicResource POS_GrandTotal}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource POS_GrandTotal}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Foreground="Black"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="{Binding Total, StringFormat={}{0:N0}}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource AccentBrush}"/>
                                 <TextBlock Text="{DynamicResource Currency_IQD_Symbol}" VerticalAlignment="Bottom" Margin="4,0,0,4" FontSize="12" Foreground="#555"/>
@@ -112,15 +112,15 @@
                             <Button Command="{Binding PayAndPrintCommand}" 
                                     Style="{StaticResource MaterialDesignRaisedButton}" 
                                     Content="{DynamicResource POS_PrintAndConfirm}" 
-                                    Width="120"
+                                    Width="140"
                                     Margin="0,0,10,0"/>
                             
                             <Button Command="{Binding ClosePrintPreviewCommand}" 
                                     Style="{StaticResource MaterialDesignOutlinedButton}" 
                                     Content="{DynamicResource Action_Close}" 
                                     Width="80"
-                                    BorderBrush="#999"
-                                    Foreground="#333"/>
+                                    Foreground="White"
+                                    Background="#444"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -313,6 +313,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/> <!-- Restaurant Mode -->
+                        <RowDefinition Height="Auto"/> <!-- Customer Selection -->
                         <RowDefinition Height="Auto"/> <!-- Tabs -->
                         <RowDefinition Height="Auto"/> <!-- Header -->
                         <RowDefinition Height="*"/>    <!-- List -->
@@ -382,8 +383,37 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Row 1: Invoice Tabs -->
-                    <UniformGrid Grid.Row="1" Rows="1" Margin="0,8,0,8">
+                    <!-- Row 1: Customer & Payment Method -->
+                    <Grid Grid.Row="1" Margin="16,0,16,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Customer Selection -->
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding Customers}"
+                                  SelectedItem="{Binding SelectedCustomer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"
+                                  materialDesign:HintAssist.Hint="اختيار الزبون (اختياري)"
+                                  IsEditable="True"
+                                  IsTextSearchEnabled="True"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                        <!-- Payment Method -->
+                        <ComboBox Grid.Column="2" 
+                                  SelectedValuePath="Tag"
+                                  SelectedValue="{Binding PaymentMethod, Mode=TwoWay}"
+                                  materialDesign:HintAssist.Hint="طريقة الدفع"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem Tag="Cash" IsSelected="True">نقدي (Cash)</ComboBoxItem>
+                            <ComboBoxItem Tag="Debt">آجل (دين)</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <!-- Row 2: Invoice Tabs -->
+                    <UniformGrid Grid.Row="2" Rows="1" Margin="0,8,0,8">
                         <!-- Invoice 1 -->
                         <RadioButton Style="{StaticResource MaterialDesignChoiceChipRadioButton}" 
                                      Content="{DynamicResource POS_InvoiceTab1}" 
@@ -408,7 +438,7 @@
                     </UniformGrid>
                     
                     <!-- Cart Header -->
-                    <Border Grid.Row="2" Padding="20,16" Background="{StaticResource GlassBrush}"
+                    <Border Grid.Row="3" Padding="20,16" Background="{StaticResource GlassBrush}"
                             CornerRadius="16,16,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -445,7 +475,7 @@
                     </Border>
                     
                     <!-- Cart Items -->
-                    <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Padding="16,8">
+                    <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto" Padding="16,8">
                         <ItemsControl ItemsSource="{Binding CartItems}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -523,7 +553,7 @@
                     </ScrollViewer>
                     
                     <!-- Cart Empty State -->
-                    <Border Grid.Row="3" 
+                    <Border Grid.Row="4" 
                             Visibility="{Binding CartItems.Count, Converter={StaticResource EqualityToVisibilityConverter}, ConverterParameter=0}"
                             HorizontalAlignment="Center" 
                             VerticalAlignment="Center">
@@ -539,7 +569,7 @@
                     </Border>
                     
                     <!-- Totals -->
-                    <Border Grid.Row="4" Padding="16" Background="{StaticResource SurfaceBrush}">
+                    <Border Grid.Row="5" Padding="16" Background="{StaticResource SurfaceBrush}">
                         <StackPanel>
                             <!-- Subtotal -->
                             <Grid Margin="0,4">
@@ -561,10 +591,34 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{DynamicResource Discount}" 
+                                           VerticalAlignment="Center"
                                            Foreground="{StaticResource TextSecondaryBrush}"/>
-                                <TextBlock Grid.Column="1" 
-                                           Text="{Binding Discount, StringFormat=-{0:N0}}"
-                                           Foreground="{StaticResource DangerBrush}"/>
+                                <TextBox Grid.Column="1" 
+                                         Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}"
+                                         Foreground="{StaticResource DangerBrush}"
+                                         FontWeight="Bold"
+                                         Width="80"
+                                         HorizontalContentAlignment="Right"
+                                         materialDesign:HintAssist.Hint="0"
+                                         Style="{StaticResource MaterialDesignTextBox}"/>
+                            </Grid>
+                            <!-- Paid Amount (Optional) -->
+                            <Grid Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="الواصل (اختياري)" 
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBox Grid.Column="1" 
+                                         Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}"
+                                         Foreground="{StaticResource SuccessBrush}"
+                                         FontWeight="Bold"
+                                         Width="80"
+                                         HorizontalContentAlignment="Right"
+                                         materialDesign:HintAssist.Hint="حسب الإجمالي"
+                                         Style="{StaticResource MaterialDesignTextBox}"/>
                             </Grid>
                             
                             <Separator Margin="0,8" Background="{StaticResource GlassBorderBrush}"/>
@@ -591,7 +645,7 @@
                     </Border>
                     
                     <!-- Checkout & Actions -->
-                    <Border Grid.Row="5" Padding="16" CornerRadius="0,0,16,16">
+                    <Border Grid.Row="6" Padding="16" CornerRadius="0,0,16,16">
                         <StackPanel>
                             <!-- Primary: Pay & Print -->
                             <Button Command="{Binding PayAndPrintCommand}"

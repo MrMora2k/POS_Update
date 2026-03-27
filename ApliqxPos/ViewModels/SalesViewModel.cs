@@ -74,14 +74,28 @@ public partial class SalesViewModel : ObservableObject
     private async Task DeleteSaleAsync(Sale sale)
     {
         if (sale == null) return;
-        
-        // TODO: confirm dialog? For now just implement basic deletion if supported by repo, 
-        // but typically we don't delete sales in POS, we cancel them. 
-        // Checking repo... generic Repository has DeleteAsync.
-        // Let's assume for now we just cancel or delete.
-        
         await _saleRepository.DeleteAsync(sale);
         Sales.Remove(sale);
         TotalRevenue = Sales.Sum(s => s.FinalAmount);
+    }
+    
+    [RelayCommand]
+    private async Task SetStatusCompletedAsync(Sale sale) => await UpdateSaleStatusAsync(sale, SaleStatus.Completed);
+
+    [RelayCommand]
+    private async Task SetStatusPendingAsync(Sale sale) => await UpdateSaleStatusAsync(sale, SaleStatus.Pending);
+
+    [RelayCommand]
+    private async Task SetStatusCancelledAsync(Sale sale) => await UpdateSaleStatusAsync(sale, SaleStatus.Cancelled);
+
+    [RelayCommand]
+    private async Task SetStatusRefundedAsync(Sale sale) => await UpdateSaleStatusAsync(sale, SaleStatus.Refunded);
+
+    private async Task UpdateSaleStatusAsync(Sale sale, SaleStatus status)
+    {
+        if (sale == null) return;
+        sale.Status = status;
+        await _saleRepository.UpdateAsync(sale);
+        await LoadDataAsync();
     }
 }

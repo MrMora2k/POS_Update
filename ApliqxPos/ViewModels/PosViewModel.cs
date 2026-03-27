@@ -540,6 +540,18 @@ public partial class PosViewModel : ObservableObject, IRecipient<DataChangedMess
     {
         if (CartItems.Count == 0) return null;
 
+        // Auto-fill PaidAmount for Cash sales if left at 0
+        if (PaidAmount == 0 && PaymentMethod == "Cash")
+        {
+            PaidAmount = Total;
+        }
+
+        // Prevent debt for anonymous customers
+        if (SelectedCustomer == null && PaidAmount < Total)
+        {
+            PaidAmount = Total;
+        }
+
         try
         {
             await _unitOfWork.BeginTransactionAsync();

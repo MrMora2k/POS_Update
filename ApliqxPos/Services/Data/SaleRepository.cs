@@ -76,7 +76,9 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
             .ThenInclude(i => i.Product)
             .ToListAsync();
 
-        return sales.Sum(s => s.Items.Sum(i => (i.UnitPrice - i.Product.CostPrice) * i.Quantity));
+        return sales.Sum(s => 
+            s.Items.Sum(i => (i.UnitPrice - i.Product.CostPrice) * i.Quantity - i.Discount) 
+            - s.DiscountAmount);
     }
 
     public async Task<int> GetSalesCountAsync(DateTime start, DateTime end)

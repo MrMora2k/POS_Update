@@ -51,6 +51,12 @@ public partial class ReportsViewModel : ObservableObject
     private int _newCustomers;
 
     [ObservableProperty]
+    private int _totalCancelled;
+
+    [ObservableProperty]
+    private decimal _totalDebtCreated;
+
+    [ObservableProperty]
     private bool _isLoading;
 
     // Charts Data
@@ -100,14 +106,21 @@ public partial class ReportsViewModel : ObservableObject
 
     private async Task LoadStatsAsync()
     {
+        // Adjust the end date to cover the entire day up to 23:59:59
+        DateTime actualEndDate = EndDate.Date.AddDays(1).AddTicks(-1);
+
         // Get sales data for the date range
-        TotalSales = await _unitOfWork.Sales.GetTotalSalesAsync(StartDate, EndDate);
-        TotalProfit = await _unitOfWork.Sales.GetTotalProfitAsync(StartDate, EndDate);
+        TotalSales = await _unitOfWork.Sales.GetTotalSalesAsync(StartDate, actualEndDate);
+        TotalProfit = await _unitOfWork.Sales.GetTotalProfitAsync(StartDate, actualEndDate);
 
         // Get transaction count
-        var sales = await _unitOfWork.Sales.GetByDateRangeAsync(StartDate, EndDate);
-        TotalTransactions = sales.Count();
+        var sales = await _unitOfWork.Sales.GetByDateRangeAsync(StartDate, actualEndDate);
+        TotalTransactions = sales.Count(s => s.Status != SaleStatus.Cancelled);
+        TotalCancelled = sales.Count(s => s.Status == SaleStatus.Cancelled || s.Status == SaleStatus.Refunded);
         
+        // Calculate Debt Created during this period
+        TotalDebtCreated = sales.Where(s => s.Status != SaleStatus.Cancelled).Sum(s => Math.Max(0, s.FinalAmount - s.PaidAmount));
+
         if (TotalTransactions > 0)
         {
             AverageOrderValue = TotalSales / TotalTransactions;
@@ -117,19 +130,20 @@ public partial class ReportsViewModel : ObservableObject
             AverageOrderValue = 0;
         }
 
-        // Get total outstanding debt
+        // Get total outstanding debt (overall)
         var customers = await _unitOfWork.Customers.GetCustomersWithDebtAsync();
         TotalDebt = customers.Sum(c => c.CurrentDebt);
 
         // New customers in date range
         var allCustomers = await _unitOfWork.Customers.GetAllAsync();
-        NewCustomers = allCustomers.Count(c => c.CreatedAt >= StartDate && c.CreatedAt <= EndDate);
+        NewCustomers = allCustomers.Count(c => c.CreatedAt >= StartDate && c.CreatedAt <= actualEndDate);
 
         // Load Chart Data
-        await LoadChartDataAsync(sales);
+        var completedSales = sales.Where(s => s.Status != SaleStatus.Cancelled);
+        await LoadChartDataAsync(completedSales);
         
-        // Load Recent Sales
-        RecentSales = new ObservableCollection<Sale>(sales.OrderByDescending(s => s.SaleDate).Take(10));
+        // Load Recent Sales (All statuses)
+        RecentSales = new ObservableCollection<Sale>(sales.OrderByDescending(s => s.SaleDate).Take(15));
     }
 
     private async Task LoadChartDataAsync(IEnumerable<Sale> sales)

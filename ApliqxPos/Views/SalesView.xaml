@@ -197,8 +197,41 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Center" Background="#2010B981">
-                                    <TextBlock Text="{Binding Status}" Foreground="{StaticResource SuccessBrush}" FontSize="12" FontWeight="SemiBold"/>
+                                <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Center">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#2010B981"/> <!-- Default Success Light -->
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                    <Setter Property="Background" Value="#20F59E0B"/> <!-- Warning Light -->
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                    <Setter Property="Background" Value="#20EF4444"/> <!-- Danger Light -->
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Refunded">
+                                                    <Setter Property="Background" Value="#20EF4444"/> <!-- Danger Light -->
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding Status}" FontSize="12" FontWeight="SemiBold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Status}" Value="Refunded">
+                                                        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -208,14 +241,50 @@
                     <DataGridTemplateColumn Header="" Width="80">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Command="{Binding DataContext.DeleteSaleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource MaterialDesignIconButton}"
-                                        ToolTip="{DynamicResource Action_Delete}"
-                                        Width="40" Height="40">
-                                    <materialDesign:PackIcon Kind="Delete" Width="20" Height="20"
-                                                              Foreground="{StaticResource DangerBrush}"/>
-                                </Button>
+                                <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" ToolTip="الإجراءات">
+                                    <StackPanel MinWidth="150" Margin="0,8">
+                                        <!-- Status Change Options -->
+                                        <TextBlock Text="تغيير الحالة" FontSize="11" Foreground="{StaticResource TextSecondaryBrush}" Margin="16,4,16,8"/>
+                                        
+                                        <Button Content="✅ مكتملة (Completed)"
+                                                Command="{Binding DataContext.SetStatusCompletedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                HorizontalContentAlignment="Left"
+                                                Foreground="{StaticResource SuccessBrush}"/>
+                                        
+                                        <Button Content="⏳ قيد الانتظار (Pending)"
+                                                Command="{Binding DataContext.SetStatusPendingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                HorizontalContentAlignment="Left"
+                                                Foreground="{StaticResource WarningBrush}"/>
+                                        
+                                        <Button Content="🔙 مرتجعة (Refunded)"
+                                                Command="{Binding DataContext.SetStatusRefundedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                HorizontalContentAlignment="Left"
+                                                Foreground="{StaticResource DangerBrush}"/>
+                                        
+                                        <Button Content="❌ ملغاة (Cancelled)"
+                                                Command="{Binding DataContext.SetStatusCancelledCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                HorizontalContentAlignment="Left"
+                                                Foreground="{StaticResource DangerBrush}"/>
+                                        
+                                        <Separator Margin="8"/>
+                                        
+                                        <!-- Delete Action -->
+                                        <Button Content="حذف نهائي"
+                                                Command="{Binding DataContext.DeleteSaleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                HorizontalContentAlignment="Left"
+                                                Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

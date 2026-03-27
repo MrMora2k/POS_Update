@@ -1,6 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ApliqxPos.Services;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Threading.Tasks;
 
@@ -8,27 +10,62 @@ namespace ApliqxPos.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private string _username = string.Empty;
+    // Saved credentials path (stored locally, never on server)
+    private static readonly string CredentialsPath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "ProPOS", "savedcreds.json");
 
-    [ObservableProperty]
-    private string _password = string.Empty;
-
-    [ObservableProperty]
-    private string _confirmPassword = string.Empty; // For registration
-
-    [ObservableProperty]
-    private bool _isRegistrationMode;
-
-    [ObservableProperty]
-    private string _statusMessage = string.Empty;
-
-    [ObservableProperty]
-    private bool _isBusy;
+    [ObservableProperty] private string _username = string.Empty;
+    [ObservableProperty] private string _password = string.Empty;
+    [ObservableProperty] private string _confirmPassword = string.Empty;
+    [ObservableProperty] private bool _isRegistrationMode;
+    [ObservableProperty] private string _statusMessage = string.Empty;
+    [ObservableProperty] private bool _isBusy;
+    [ObservableProperty] private bool _rememberMe;
 
     public LoginViewModel()
     {
+        LoadSavedCredentials();
         CheckRegistrationMode();
+    }
+
+    private void LoadSavedCredentials()
+    {
+        try
+        {
+            if (File.Exists(CredentialsPath))
+            {
+                var json = File.ReadAllText(CredentialsPath);
+                var creds = JsonSerializer.Deserialize<SavedCredentials>(json);
+                if (creds != null && creds.Remember)
+                {
+                    Username = creds.Username ?? string.Empty;
+                    Password = creds.Password ?? string.Empty;
+                    RememberMe = true;
+                }
+            }
+        }
+        catch { /* ignore */ }
+    }
+
+    private void SaveOrClearCredentials()
+    {
+        try
+        {
+            var dir = Path.GetDirectoryName(CredentialsPath)!;
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+            if (RememberMe)
+            {
+                var creds = new SavedCredentials { Username = Username, Password = Password, Remember = true };
+                File.WriteAllText(CredentialsPath, JsonSerializer.Serialize(creds));
+            }
+            else
+            {
+                if (File.Exists(CredentialsPath)) File.Delete(CredentialsPath);
+            }
+        }
+        catch { /* ignore */ }
     }
 
     private async void CheckRegistrationMode()
@@ -59,11 +96,11 @@ public partial class LoginViewModel : ObservableObject
                 IsBusy = false;
                 return;
             }
-
             try
             {
                 await AuthService.Instance.RegisterOwnerAsync(Username, Password);
-                StatusMessage = "تم إنشاء حساب المالك بنجاح";
+                StatusMessage = "✅ تم إنشاء حساب المالك بنجاح";
+                SaveOrClearCredentials();
                 await Task.Delay(1000);
                 CompleteLogin();
             }
@@ -77,11 +114,12 @@ public partial class LoginViewModel : ObservableObject
             bool success = await AuthService.Instance.ProcessLoginAsync(Username, Password);
             if (success)
             {
+                SaveOrClearCredentials();
                 CompleteLogin();
             }
             else
             {
-                StatusMessage = "اسم المستخدم أو كلمة المرور غير صحيحة";
+                StatusMessage = "❌ اسم المستخدم أو كلمة المرور غير صحيحة";
             }
         }
 
@@ -99,5 +137,12 @@ public partial class LoginViewModel : ObservableObject
                 break;
             }
         }
+    }
+
+    private record SavedCredentials
+    {
+        public string? Username { get; init; }
+        public string? Password { get; init; }
+        public bool Remember { get; init; }
     }
 }

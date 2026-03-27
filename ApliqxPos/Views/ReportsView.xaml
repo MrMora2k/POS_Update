@@ -42,8 +42,25 @@
                                    VerticalAlignment="Center"/>
                     </StackPanel>
                     
-                    <!-- Period Buttons -->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <!-- Period Buttons & Custom Dates -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}"
+                                    materialDesign:HintAssist.Hint="من تاريخ"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                    Width="120" Margin="0,0,8,0"/>
+                        
+                        <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}"
+                                    materialDesign:HintAssist.Hint="إلى تاريخ"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                    Width="120" Margin="0,0,16,0"/>
+
+                        <Button Command="{Binding LoadDataCommand}"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                ToolTip="تحديث البيانات"
+                                Margin="0,0,16,0">
+                            <materialDesign:PackIcon Kind="Refresh" Foreground="{StaticResource AccentBrush}" Width="24" Height="24"/>
+                        </Button>
+
                         <Button Content="يومي"
                                 Command="{Binding SetPeriodCommand}"
                                 CommandParameter="Daily"
@@ -68,18 +85,18 @@
             </Border>
             
             <!-- Stats Cards Row 1 & 2 combined for better layout -->
-            <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,16">
+            <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,16">
                 <!-- Total Sales -->
                 <Border Style="{StaticResource PremiumCard}" Margin="0,0,8,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="50" Height="50" CornerRadius="12" Background="{StaticResource PrimaryGradient}" Margin="0,0,12,0">
-                            <materialDesign:PackIcon Kind="CashMultiple" Width="24" Height="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource PrimaryGradient}" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="CashMultiple" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock Text="{DynamicResource Report_TotalSales}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock FontSize="20" FontWeight="Bold" Margin="0,4,0,0">
-                                <Run Text="{Binding TotalSales, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="12" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0">
+                                <Run Text="{Binding TotalSales, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10" Foreground="{StaticResource TextMutedBrush}"/>
                             </TextBlock>
                         </StackPanel>
                     </Grid>
@@ -89,28 +106,58 @@
                 <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="50" Height="50" CornerRadius="12" Background="{StaticResource SuccessGradient}" Margin="0,0,12,0">
-                            <materialDesign:PackIcon Kind="TrendingUp" Width="24" Height="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource SuccessGradient}" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="TrendingUp" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock Text="{DynamicResource Report_TotalProfit}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock FontSize="20" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource SuccessBrush}">
-                                <Run Text="{Binding TotalProfit, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="12"/>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource SuccessBrush}">
+                                <Run Text="{Binding TotalProfit, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10"/>
                             </TextBlock>
                         </StackPanel>
                     </Grid>
                 </Border>
 
                 <!-- Transactions -->
-                <Border Style="{StaticResource PremiumCard}" Margin="8,0,0,8">
+                <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
                     <Grid>
                         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="50" Height="50" CornerRadius="12" Background="{StaticResource CyanGradient}" Margin="0,0,12,0">
-                            <materialDesign:PackIcon Kind="Receipt" Width="24" Height="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource CyanGradient}" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="Receipt" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <TextBlock Text="{DynamicResource Report_Transactions}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
-                            <TextBlock Text="{Binding TotalTransactions}" FontSize="20" FontWeight="Bold" Margin="0,4,0,0"/>
+                            <TextBlock Text="{Binding TotalTransactions}" FontSize="16" FontWeight="Bold" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Cancelled / Refunds -->
+                <Border Style="{StaticResource PremiumCard}" Margin="4,0,4,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource DangerBrush}" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="Cancel" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="مرتجعات وملغاة" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock Text="{Binding TotalCancelled}" FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource DangerBrush}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Debt Created -->
+                <Border Style="{StaticResource PremiumCard}" Margin="8,0,0,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="{StaticResource WarningBrush}" Margin="0,0,8,0">
+                            <materialDesign:PackIcon Kind="AccountCreditCard" Width="20" Height="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="إجمالي الديون (الفترة)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,4,0,0" Foreground="{StaticResource WarningBrush}">
+                                <Run Text="{Binding TotalDebtCreated, StringFormat={}{0:N0}}"/><Run Text=" د.ع" FontSize="10"/>
+                            </TextBlock>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -196,6 +243,13 @@
                                         </DataTemplate>
                                     </DataGridTextColumn.HeaderTemplate>
                                 </DataGridTextColumn>
+                                <DataGridTextColumn Binding="{Binding PaymentMethod}" Width="Auto">
+                                    <DataGridTextColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="دفع"/>
+                                        </DataTemplate>
+                                    </DataGridTextColumn.HeaderTemplate>
+                                </DataGridTextColumn>
                                 <DataGridTemplateColumn Width="Auto">
                                     <DataGridTemplateColumn.HeaderTemplate>
                                         <DataTemplate>
@@ -204,8 +258,24 @@
                                     </DataGridTemplateColumn.HeaderTemplate>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Border Padding="8,4" CornerRadius="8" Background="{StaticResource SuccessGradient}" HorizontalAlignment="Center">
-                                                <TextBlock Text="{DynamicResource Reports_Completed}" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                                            <Border Padding="8,4" CornerRadius="8" HorizontalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="{StaticResource SuccessGradient}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                                                <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="Refunded">
+                                                                <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Status}" Value="Pending">
+                                                                <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Status}" Foreground="White" FontSize="10" FontWeight="Bold" TextAlignment="Center"/>
                                             </Border>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
