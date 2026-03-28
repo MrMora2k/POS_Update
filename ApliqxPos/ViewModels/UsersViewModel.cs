@@ -48,7 +48,10 @@ public partial class UsersViewModel : ObservableObject
 
         var result = await DialogHost.Show(view, "RootDialog");
 
-        if (result is bool success && success)
+        bool isConfirmed = result is bool b && b || 
+                          (result is string s && bool.TryParse(s, out bool b2) && b2);
+
+        if (isConfirmed)
         {
             try
             {
@@ -72,7 +75,10 @@ public partial class UsersViewModel : ObservableObject
 
         var result = await DialogHost.Show(view, "RootDialog");
 
-        if (result is bool success && success)
+        bool isConfirmed = result is bool b && b || 
+                          (result is string s && bool.TryParse(s, out bool b2) && b2);
+
+        if (isConfirmed)
         {
             try
             {

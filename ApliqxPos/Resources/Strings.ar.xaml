@@ -35,6 +35,7 @@
     <s:String x:Key="Action_Export">تصدير</s:String>
     <s:String x:Key="Action_Refresh">تحديث</s:String>
     <s:String x:Key="Action_Close">إغلاق</s:String>
+    <s:String x:Key="Action_Logout">تسجيل الخروج</s:String>
 
     <!-- Common Labels -->
     <s:String x:Key="Label_Name">الاسم</s:String>

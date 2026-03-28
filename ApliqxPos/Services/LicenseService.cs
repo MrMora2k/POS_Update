@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-
-using Supabase;
 using System.Net.NetworkInformation;
 
 namespace ApliqxPos.Services;
@@ -17,24 +18,19 @@ public class LicenseService
     public static LicenseService Instance => _instance.Value;
 
     private readonly string _licenseFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ApliqxPos", "license.dat");
-    private readonly string _supabaseUrl = "https://hdwioskrgvkzwvkbgjqf.supabase.co";
-    private readonly string _supabaseKey = "sb_publishable_pCIZJH1eNxu6jiZZOt0nsg_OYVOfHQY";
+    private readonly string _firebaseUrl = "https://pos-lic-default-rtdb.europe-west1.firebasedatabase.app";
     
-    private Client _supabase;
+    private readonly HttpClient _httpClient;
 
     private LicenseService()
     {
-        var options = new SupabaseOptions
-        {
-            AutoRefreshToken = true,
-            AutoConnectRealtime = true
-        };
-        _supabase = new Client(_supabaseUrl, _supabaseKey, options);
+        _httpClient = new HttpClient();
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        await _supabase.InitializeAsync();
+        // No initialization needed for Firebase REST API
+        return Task.CompletedTask;
     }
 
     public bool IsActivated()
@@ -65,20 +61,25 @@ public class LicenseService
     {
         try
         {
-            await InitializeAsync();
+            // 1. Fetch license from Firebase by key
+            var url = $"{_firebaseUrl}/licenses/{Uri.EscapeDataString(key.Trim())}.json";
+            var response = await _httpClient.GetAsync(url);
+            var json = await response.Content.ReadAsStringAsync();
 
-            // 1. Check if key exists and is available
-            var response = await _supabase
-                .From<LicenseModel>()
-                .Select("*") // Select all to check credentials
-                .Where(x => x.Key == key)
-                .Get();
+            if (!response.IsSuccessStatusCode)
+            {
+                return (false, $"خطأ في الاتصال بالخادم: {response.StatusCode}", null, null);
+            }
 
-            var license = response.Models.FirstOrDefault();
+            if (json == "null" || string.IsNullOrWhiteSpace(json))
+            {
+                return (false, "مفتاح التفعيل غير موجود في قاعدة البيانات", null, null);
+            }
 
+            var license = JsonSerializer.Deserialize<FirebaseLicenseModel>(json);
             if (license == null)
             {
-                return (false, "مفتاح التفعيل غير صحيح", null, null);
+                return (false, $"خطأ في تحليل البيانات", null, null);
             }
 
             // 2. Verify Credentials
@@ -112,14 +113,18 @@ public class LicenseService
                 deviceList.Add(currentMachineId);
                 var newDeviceIds = string.Join("|", deviceList);
 
-                await _supabase
-                    .From<LicenseModel>()
-                    .Where(x => x.Key == key)
-                    .Set(x => x.IsActive, true)
-                    .Set(x => x.DeviceIds, newDeviceIds)
-                    .Set(x => x.MachineId, currentMachineId) // Update legacy field with latest
-                    .Set(x => x.ActivatedAt, DateTime.UtcNow)
-                    .Update();
+                // Update Firebase with PATCH
+                var updateData = new Dictionary<string, object>
+                {
+                    ["isActive"] = true,
+                    ["deviceIds"] = newDeviceIds,
+                    ["machineId"] = currentMachineId,
+                    ["activatedAt"] = DateTime.UtcNow.ToString("o")
+                };
+
+                var updateJson = JsonSerializer.Serialize(updateData);
+                var content = new StringContent(updateJson, Encoding.UTF8, "application/json");
+                await _httpClient.PatchAsync($"{_firebaseUrl}/licenses/{key}.json", content);
 
                 SaveLicenseLocally(key, currentMachineId);
                 return (true, "تم تفعيل البرنامج بنجاح (جهاز جديد)", license.Username, license.PasswordHash);
@@ -128,8 +133,6 @@ public class LicenseService
             {
                 return (false, $"عذراً، تجاوزت الحد الأقصى لعدد الأجهزة المسموح بها ({license.MaxDevices}).", null, null);
             }
-
-            return (false, "حدث خطأ غير متوقع", null, null);
         }
         catch (Exception ex)
         {
@@ -153,8 +156,6 @@ public class LicenseService
 
     private string GetMachineId()
     {
-        // Simple stable ID based on MAC address of first active network interface
-        // This is robust enough for basic binding without needing System.Management
         try
         {
             var mac = NetworkInterface.GetAllNetworkInterfaces()
@@ -168,7 +169,6 @@ public class LicenseService
                 mac = Environment.MachineName;
             }
             
-            // Hash it to look like a proper ID
             using var sha = SHA256.Create();
             var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(mac));
             return BitConverter.ToString(hash).Replace("-", "").Substring(0, 20);
@@ -181,44 +181,44 @@ public class LicenseService
 
     private static string ComputeSha256Hash(string rawData)
     {
-        using (SHA256 sha256Hash = SHA256.Create())
+        using SHA256 sha256Hash = SHA256.Create();
+        byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < bytes.Length; i++)
         {
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                builder.Append(bytes[i].ToString("x2"));
-            }
-            return builder.ToString();
+            builder.Append(bytes[i].ToString("x2"));
         }
+        return builder.ToString();
     }
 
-    // Supabase Model
-    [Supabase.Postgrest.Attributes.Table("licenses")]
-    public class LicenseModel : Supabase.Postgrest.Models.BaseModel
+    // Firebase JSON Model (System.Text.Json)
+    public class FirebaseLicenseModel
     {
-        [Supabase.Postgrest.Attributes.PrimaryKey("key")]
-        public string Key { get; set; }
+        [JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("username")]
-        public string Username { get; set; }
+        [JsonPropertyName("passwordHash")]
+        public string PasswordHash { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("password_hash")]
-        public string PasswordHash { get; set; }
+        [JsonPropertyName("plainPassword")]
+        public string PlainPassword { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("machine_id")]
-        public string MachineId { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("is_active")]
+        [JsonPropertyName("isActive")]
         public bool IsActive { get; set; }
 
-        [Supabase.Postgrest.Attributes.Column("activated_at")]
-        public DateTime? ActivatedAt { get; set; }
+        [JsonPropertyName("machineId")]
+        public string MachineId { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("max_devices")]
+        [JsonPropertyName("activatedAt")]
+        public string? ActivatedAt { get; set; }
+
+        [JsonPropertyName("createdAt")]
+        public string? CreatedAt { get; set; }
+
+        [JsonPropertyName("maxDevices")]
         public int MaxDevices { get; set; } = 1;
 
-        [Supabase.Postgrest.Attributes.Column("device_ids")]
-        public string DeviceIds { get; set; }
+        [JsonPropertyName("deviceIds")]
+        public string DeviceIds { get; set; } = string.Empty;
     }
 }

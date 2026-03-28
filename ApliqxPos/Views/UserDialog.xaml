@@ -37,8 +37,8 @@
                      materialDesign:HintAssist.Hint="اسم المستخدم"
                      IsEnabled="{Binding IsEditMode, Converter={StaticResource InverseBoolConverter}}"/>
 
-            <PasswordBox materialDesign:HintAssist.Hint="كلمة المرور (اتركها فارغة لعدم التغيير)"
-                         materialDesign:PasswordBoxAssist.Password="{Binding Password, Mode=TwoWay}"/>
+            <PasswordBox x:Name="PasswordBox"
+                         materialDesign:HintAssist.Hint="كلمة المرور (اتركها فارغة لعدم التغيير)"/>
 
             <TextBox Text="{Binding PinCode, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="رمز PIN (اختياري)"/>

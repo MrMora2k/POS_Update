@@ -147,7 +147,7 @@
                         <!-- Error Message -->
                         <Border CornerRadius="8" Padding="12,8"
                                 Background="#FFF3F3" Margin="0,0,0,16"
-                                Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="AlertCircle" Width="18" Height="18"
                                                          Foreground="#E53935" VerticalAlignment="Center"/>
@@ -159,7 +159,6 @@
 
                         <!-- Activate Button -->
                         <Button Command="{Binding ActivateCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                                 IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}"
                                 Height="48" FontSize="15" FontWeight="SemiBold"
                                 Style="{StaticResource GradientButton}">

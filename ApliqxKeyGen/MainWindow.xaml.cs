@@ -1,16 +1,17 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows;
-using Supabase;
 
 namespace ApliqxKeyGen;
 
 public partial class MainWindow : Window
 {
-    private readonly string _supabaseUrl = "https://hdwioskrgvkzwvkbgjqf.supabase.co";
-    private readonly string _supabaseKey = "sb_publishable_pCIZJH1eNxu6jiZZOt0nsg_OYVOfHQY";
-    private Client _supabase = null!;
+    private readonly string _firebaseUrl = "https://pos-lic-default-rtdb.europe-west1.firebasedatabase.app";
+    private readonly HttpClient _httpClient = new();
 
     public ObservableCollection<LicenseModel> Licenses { get; set; } = new ObservableCollection<LicenseModel>();
 
@@ -18,18 +19,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = this;
-        InitializeSupabase();
         LoadLicensesAsync();
-    }
-
-    private void InitializeSupabase()
-    {
-        var options = new SupabaseOptions
-        {
-            AutoRefreshToken = true,
-            AutoConnectRealtime = true
-        };
-        _supabase = new Client(_supabaseUrl, _supabaseKey, options);
     }
 
     private async void LoadLicensesAsync()
@@ -38,18 +28,32 @@ public partial class MainWindow : Window
         {
             LoadingBar.Visibility = Visibility.Visible;
             StatusTextBlock.Text = "Loading licenses...";
-            
-            await _supabase.InitializeAsync();
-            
-            var response = await _supabase.From<LicenseModel>()
-                .Select("*")
-                .Order("created_at", Supabase.Postgrest.Constants.Ordering.Descending)
-                .Get();
+
+            var response = await _httpClient.GetAsync($"{_firebaseUrl}/licenses.json");
+            var json = await response.Content.ReadAsStringAsync();
 
             Licenses.Clear();
-            foreach (var license in response.Models)
+
+            if (response.IsSuccessStatusCode && json != "null" && !string.IsNullOrWhiteSpace(json))
             {
-                Licenses.Add(license);
+                var licensesDict = JsonSerializer.Deserialize<Dictionary<string, LicenseModel>>(json);
+                if (licensesDict != null)
+                {
+                    // Sort by CreatedAt descending
+                    var sorted = licensesDict
+                        .Select(kvp =>
+                        {
+                            kvp.Value.Key = kvp.Key;
+                            return kvp.Value;
+                        })
+                        .OrderByDescending(l => l.CreatedAt)
+                        .ToList();
+
+                    foreach (var license in sorted)
+                    {
+                        Licenses.Add(license);
+                    }
+                }
             }
 
             StatusTextBlock.Text = $"Loaded {Licenses.Count} licenses.";
@@ -68,7 +72,6 @@ public partial class MainWindow : Window
 
     private void GenerateKey_Click(object sender, RoutedEventArgs e)
     {
-        // Simple 4-part key
         var key = $"{GenerateSegment()}-{GenerateSegment()}-{GenerateSegment()}-{GenerateSegment()}";
         KeyTextBox.Text = key;
     }
@@ -84,12 +87,10 @@ public partial class MainWindow : Window
     private string? _editingLicenseKey = null;
     private bool _isSyncing = false;
 
-
     private async void CreateLicense_Click(object sender, RoutedEventArgs e)
     {
         var key = KeyTextBox.Text.Trim();
         var username = UsernameTextBox.Text.Trim();
-        // Ensure we get the latest password
         var password = ShowPasswordToggle.IsChecked == true ? VisiblePasswordBox.Text : PasswordBox.Password;
 
         if (!int.TryParse(MaxDevicesTextBox.Text, out int maxDevices) || maxDevices < 1)
@@ -113,14 +114,11 @@ public partial class MainWindow : Window
 
         try
         {
-            await _supabase.InitializeAsync();
-
-            // Hash Password
             var passwordHash = ComputeSha256Hash(password);
 
             if (_editingLicenseKey == null)
             {
-                // Create Mode
+                // Create Mode - PUT new license
                 var model = new LicenseModel
                 {
                     Key = key,
@@ -128,27 +126,35 @@ public partial class MainWindow : Window
                     PasswordHash = passwordHash,
                     PlainPassword = password,
                     IsActive = false,
-                    CreatedAt = DateTime.UtcNow,
-                    MaxDevices = maxDevices
+                    CreatedAt = DateTime.UtcNow.ToString("o"),
+                    MaxDevices = maxDevices,
+                    DeviceIds = ""
                 };
-                await _supabase.From<LicenseModel>().Insert(model);
+
+                var jsonData = JsonSerializer.Serialize(model);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                await _httpClient.PutAsync($"{_firebaseUrl}/licenses/{key}.json", content);
                 StatusTextBlock.Text = "License Created Successfully!";
             }
             else
             {
-                // Update Mode
-                await _supabase.From<LicenseModel>()
-                    .Where(x => x.Key == _editingLicenseKey)
-                    .Set(x => x.Username, username)
-                    .Set(x => x.PasswordHash, passwordHash)
-                    .Set(x => x.PlainPassword, password)
-                    .Set(x => x.MaxDevices, maxDevices)
-                    .Update();
+                // Update Mode - PATCH existing license
+                var updateData = new Dictionary<string, object>
+                {
+                    ["username"] = username,
+                    ["passwordHash"] = passwordHash,
+                    ["plainPassword"] = password,
+                    ["maxDevices"] = maxDevices
+                };
+
+                var jsonData = JsonSerializer.Serialize(updateData);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                await _httpClient.PatchAsync($"{_firebaseUrl}/licenses/{_editingLicenseKey}.json", content);
                 StatusTextBlock.Text = "License Updated Successfully!";
             }
 
             StatusTextBlock.Foreground = System.Windows.Media.Brushes.Green;
-            
+
             ResetForm();
             LoadLicensesAsync();
         }
@@ -180,18 +186,18 @@ public partial class MainWindow : Window
         if (sender is FrameworkElement element && element.DataContext is LicenseModel license)
         {
             _editingLicenseKey = license.Key;
-            
+
             KeyTextBox.Text = license.Key;
             KeyTextBox.IsReadOnly = true;
-            
+
             UsernameTextBox.Text = license.Username;
             PasswordBox.Password = license.PlainPassword;
             MaxDevicesTextBox.Text = license.MaxDevices.ToString();
-            
+
             CreateButton.Content = "Update License";
             CancelEditButton.Visibility = Visibility.Visible;
             ResetActivationButton.Visibility = Visibility.Visible;
-            
+
             StatusTextBlock.Text = $"Editing license: {license.Key}";
             StatusTextBlock.Foreground = System.Windows.Media.Brushes.Blue;
         }
@@ -207,18 +213,9 @@ public partial class MainWindow : Window
                 try
                 {
                     LoadingBar.Visibility = Visibility.Visible;
-                    await _supabase.InitializeAsync();
-                    
-                    // Supabase Delete (returns void/Task in this version)
-                    await _supabase.From<LicenseModel>().Where(x => x.Key == license.Key).Delete();
-                    
-                    // Verify Deletion by attempting to fetch the record
-                    var check = await _supabase.From<LicenseModel>().Where(x => x.Key == license.Key).Get();
-                    
-                    if (check.Models.Count > 0)
-                    {
-                        throw new Exception("لم يتم حذف الترخيص. تحقق من صلاحيات قاعدة البيانات (RLS Policy).");
-                    }
+
+                    // Firebase DELETE
+                    await _httpClient.DeleteAsync($"{_firebaseUrl}/licenses/{license.Key}.json");
 
                     LoadLicensesAsync();
                     StatusTextBlock.Text = "License deleted successfully.";
@@ -254,22 +251,22 @@ public partial class MainWindow : Window
             try
             {
                 LoadingBar.Visibility = Visibility.Visible;
-                await _supabase.InitializeAsync();
 
-                // Clear formatting and set IsActive to false
-                await _supabase.From<LicenseModel>()
-                    .Where(x => x.Key == _editingLicenseKey)
-                    .Set(x => x.IsActive, false)
-                    .Set(x => x.DeviceIds, string.Empty)
-                    // We don't need to set MachineId to null if we removed it from the model, 
-                    // but if the column still exists in DB it's fine. 
-                    // Postgrest ignores columns not in model usually, or we should have it in model?
-                    // Let's assume we depend on DeviceIds now.
-                    .Update();
+                // PATCH to reset activation fields
+                var updateData = new Dictionary<string, object>
+                {
+                    ["isActive"] = false,
+                    ["deviceIds"] = "",
+                    ["machineId"] = ""
+                };
+
+                var jsonData = JsonSerializer.Serialize(updateData);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                await _httpClient.PatchAsync($"{_firebaseUrl}/licenses/{_editingLicenseKey}.json", content);
 
                 StatusTextBlock.Text = "Activations reset successfully.";
                 StatusTextBlock.Foreground = System.Windows.Media.Brushes.Green;
-                
+
                 ResetForm();
                 LoadLicensesAsync();
             }
@@ -294,7 +291,7 @@ public partial class MainWindow : Window
         PasswordBox.Clear();
         VisiblePasswordBox.Clear();
         MaxDevicesTextBox.Text = "1";
-        
+
         CreateButton.Content = "Create License";
         CancelEditButton.Visibility = Visibility.Collapsed;
         ResetActivationButton.Visibility = Visibility.Collapsed;
@@ -337,43 +334,47 @@ public partial class MainWindow : Window
 
     private static string ComputeSha256Hash(string rawData)
     {
-        using (SHA256 sha256Hash = SHA256.Create())
+        using SHA256 sha256Hash = SHA256.Create();
+        byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < bytes.Length; i++)
         {
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                builder.Append(bytes[i].ToString("x2"));
-            }
-            return builder.ToString();
+            builder.Append(bytes[i].ToString("x2"));
         }
+        return builder.ToString();
     }
 
-    [Supabase.Postgrest.Attributes.Table("licenses")]
-    public class LicenseModel : Supabase.Postgrest.Models.BaseModel
+    // Firebase JSON Model
+    public class LicenseModel
     {
-        [Supabase.Postgrest.Attributes.PrimaryKey("key", true)]
+        [JsonPropertyName("key")]
         public string Key { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("password_hash")]
+        [JsonPropertyName("passwordHash")]
         public string PasswordHash { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("plain_password")]
+        [JsonPropertyName("plainPassword")]
         public string PlainPassword { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("is_active")]
+        [JsonPropertyName("isActive")]
         public bool IsActive { get; set; }
 
-        [Supabase.Postgrest.Attributes.Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        [JsonPropertyName("createdAt")]
+        public string CreatedAt { get; set; } = string.Empty;
 
-        [Supabase.Postgrest.Attributes.Column("max_devices")]
+        [JsonPropertyName("maxDevices")]
         public int MaxDevices { get; set; } = 1;
 
-        [Supabase.Postgrest.Attributes.Column("device_ids")]
+        [JsonPropertyName("deviceIds")]
         public string DeviceIds { get; set; } = string.Empty;
+
+        [JsonPropertyName("machineId")]
+        public string MachineId { get; set; } = string.Empty;
+
+        [JsonPropertyName("activatedAt")]
+        public string? ActivatedAt { get; set; }
     }
 }

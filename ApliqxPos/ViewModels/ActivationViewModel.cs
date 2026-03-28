@@ -18,7 +18,10 @@ public partial class ActivationViewModel : ObservableObject
     private string _password = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasError))]
     private string _errorMessage = string.Empty;
+
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
     [ObservableProperty]
     private bool _isBusy;

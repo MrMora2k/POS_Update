@@ -90,7 +90,7 @@
                     </StackPanel>
 
                     <!-- Version Bottom Left -->
-                    <TextBlock Text="v1.0.0" Foreground="#80DEEA" FontSize="11"
+                    <TextBlock Text="{Binding AppVersion}" Foreground="#80DEEA" FontSize="11"
                                VerticalAlignment="Bottom" HorizontalAlignment="Left"
                                Margin="20,0,0,20" Opacity="0.7"/>
                 </Grid>

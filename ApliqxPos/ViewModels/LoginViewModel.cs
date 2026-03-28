@@ -23,6 +23,8 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty] private bool _isBusy;
     [ObservableProperty] private bool _rememberMe;
 
+    public string AppVersion => $"v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0"}";
+
     public LoginViewModel()
     {
         LoadSavedCredentials();
