@@ -144,12 +144,40 @@ public partial class ProductsViewModel : ObservableObject, IRecipient<DataChange
         var products = await _unitOfWork.Products.GetAllAsync();
         // Only show active (non-deleted) products
         Products = new ObservableCollection<Product>(products.Where(p => p.IsActive));
+        
+        // Reset selected category to "All" if it was null
+        if (SelectedCategory == null && Categories.Any())
+        {
+            SelectedCategory = Categories.FirstOrDefault(c => c.Id == 0);
+        }
     }
 
     private async Task LoadCategoriesAsync()
     {
         var categories = await _unitOfWork.Categories.GetAllAsync();
-        Categories = new ObservableCollection<Category>(categories.Where(c => c.IsActive));
+        var activeCategories = categories.Where(c => c.IsActive).ToList();
+        
+        // Add "All" category at the beginning
+        var allCategory = new Category 
+        { 
+            Id = 0, 
+            Name = Localization.GetString("Action_All") ?? "All",
+            NameAr = "الكل" 
+        };
+        
+        activeCategories.Insert(0, allCategory);
+        Categories = new ObservableCollection<Category>(activeCategories);
+        
+        // Default select "All"
+        if (SelectedCategory == null)
+        {
+            SelectedCategory = allCategory;
+        }
+    }
+
+    partial void OnSelectedCategoryChanged(Category? value)
+    {
+        FilterByCategoryCommand.Execute(null);
     }
 
     [RelayCommand]
@@ -328,14 +356,14 @@ public partial class ProductsViewModel : ObservableObject, IRecipient<DataChange
     [RelayCommand]
     private async Task FilterByCategoryAsync()
     {
-        if (SelectedCategory == null)
+        if (SelectedCategory == null || SelectedCategory.Id == 0)
         {
             await LoadProductsAsync();
             return;
         }
 
         var products = await _unitOfWork.Products.GetByCategoryAsync(SelectedCategory.Id);
-        Products = new ObservableCollection<Product>(products);
+        Products = new ObservableCollection<Product>(products.Where(p => p.IsActive));
     }
 
     [RelayCommand]

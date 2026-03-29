@@ -36,6 +36,12 @@
     <s:String x:Key="Action_Refresh">Refresh</s:String>
     <s:String x:Key="Action_Close">Close</s:String>
     <s:String x:Key="Action_Logout">Logout</s:String>
+    <s:String x:Key="Action_All">All</s:String>
+    <s:String x:Key="Action_ExportAudit">Export Audit PDF</s:String>
+    <s:String x:Key="Report_AuditTitle">Stock &amp; Sales Audit Report</s:String>
+    <s:String x:Key="Header_SoldQty">Sold Qty</s:String>
+    <s:String x:Key="Header_RemainingStock">Remaining Stock</s:String>
+    <s:String x:Key="Header_CurrentValue">Current Value</s:String>
 
     <!-- Common Labels -->
     <s:String x:Key="Label_Name">Name</s:String>

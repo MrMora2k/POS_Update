@@ -23,7 +23,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
     public async Task<IEnumerable<Customer>> GetCustomersWithDebtAsync()
     {
         var customers = await _dbSet
-            .Where(c => c.CurrentDebt > 0 || c.Sales.Any(s => s.FinalAmount > s.PaidAmount))
+            .Where(c => c.CurrentDebt > 0 || c.Sales.Any(s => s.TotalAmount - s.DiscountAmount > s.PaidAmount))
             .ToListAsync();
             
         return customers.OrderByDescending(c => c.CurrentDebt);

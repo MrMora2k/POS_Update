@@ -36,6 +36,12 @@
     <s:String x:Key="Action_Refresh">تحديث</s:String>
     <s:String x:Key="Action_Close">إغلاق</s:String>
     <s:String x:Key="Action_Logout">تسجيل الخروج</s:String>
+    <s:String x:Key="Action_All">الكل</s:String>
+    <s:String x:Key="Action_ExportAudit">تصدير جرد PDF</s:String>
+    <s:String x:Key="Report_AuditTitle">تقرير الجرد والمخزن</s:String>
+    <s:String x:Key="Header_SoldQty">الكمية المباعة</s:String>
+    <s:String x:Key="Header_RemainingStock">المتبقي بالمخزن</s:String>
+    <s:String x:Key="Header_CurrentValue">القيمة الحالية</s:String>
 
     <!-- Common Labels -->
     <s:String x:Key="Label_Name">الاسم</s:String>

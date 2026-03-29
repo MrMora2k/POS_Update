@@ -57,29 +57,83 @@
                         <Button Command="{Binding LoadDataCommand}"
                                 Style="{StaticResource MaterialDesignIconButton}"
                                 ToolTip="تحديث البيانات"
-                                Margin="0,0,16,0">
+                                Margin="0,0,8,0">
                             <materialDesign:PackIcon Kind="Refresh" Foreground="{DynamicResource AccentBrush}" Width="24" Height="24"/>
+                        </Button>
+
+                        <Button Command="{Binding ExportStockAuditCommand}"
+                                Style="{StaticResource MaterialDesignIconButton}"
+                                ToolTip="{DynamicResource Action_ExportAudit}"
+                                Margin="0,0,16,0">
+                            <materialDesign:PackIcon Kind="FilePdfBox" Foreground="{DynamicResource SuccessBrush}" Width="24" Height="24"/>
                         </Button>
 
                         <Button Content="يومي"
                                 Command="{Binding SetPeriodCommand}"
                                 CommandParameter="Daily"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Margin="0,0,8,0"/>
+                                Margin="0,0,8,0">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedPeriod}" Value="Daily">
+                                            <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
                         <Button Content="أسبوعي"
                                 Command="{Binding SetPeriodCommand}"
                                 CommandParameter="Weekly"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"
-                                Margin="0,0,8,0"/>
+                                Margin="0,0,8,0">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedPeriod}" Value="Weekly">
+                                            <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
                         <Button Content="شهري"
                                 Command="{Binding SetPeriodCommand}"
                                 CommandParameter="Monthly"
-                                Style="{StaticResource GradientButton}"
-                                Margin="0,0,8,0"/>
+                                Margin="0,0,8,0">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedPeriod}" Value="Monthly">
+                                            <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
                         <Button Content="سنوي"
                                 Command="{Binding SetPeriodCommand}"
-                                CommandParameter="Yearly"
-                                Style="{StaticResource MaterialDesignOutlinedButton}"/>
+                                CommandParameter="Yearly">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedPeriod}" Value="Yearly">
+                                            <Setter Property="Background" Value="{DynamicResource PrimaryGradient}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>

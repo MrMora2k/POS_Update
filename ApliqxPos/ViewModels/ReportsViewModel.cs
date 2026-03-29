@@ -11,6 +11,10 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Collections.ObjectModel;
 using LiveChartsCore.SkiaSharpView.VisualElements;
+using LiveChartsCore.VisualElements;
+using Microsoft.Win32;
+using System.IO;
+using System.Diagnostics;
 
 namespace ApliqxPos.ViewModels;
 
@@ -151,6 +155,7 @@ public partial class ReportsViewModel : ObservableObject, IRecipient<ViewSwitche
 
     private async Task LoadChartDataAsync(IEnumerable<Sale> sales)
     {
+        await Task.CompletedTask;
         if (!sales.Any())
         {
             SalesTrendSeries = [];
@@ -263,6 +268,76 @@ public partial class ReportsViewModel : ObservableObject, IRecipient<ViewSwitche
         }
 
         await LoadDataAsync();
+    }
+
+    [RelayCommand]
+    private async Task ExportStockAuditAsync()
+    {
+        IsLoading = true;
+        try
+        {
+            DateTime actualEndDate = EndDate.Date.AddDays(1).AddTicks(-1);
+            var periodSales = await _unitOfWork.Sales.GetByDateRangeAsync(StartDate, actualEndDate);
+            var allProducts = await _unitOfWork.Products.GetAllAsync();
+            var activeProducts = allProducts.Where(p => p.IsActive).ToList();
+
+            // Aggregate items
+            var auditItems = new List<AuditItem>();
+            foreach (var product in activeProducts)
+            {
+                var productSalesItems = periodSales
+                    .Where(s => s.Status != SaleStatus.Cancelled)
+                    .SelectMany(s => s.Items)
+                    .Where(i => i.ProductId == product.Id)
+                    .ToList();
+
+                auditItems.Add(new AuditItem
+                {
+                    Name = product.Name,
+                    Category = product.Category?.Name ?? "N/A",
+                    SoldQuantity = productSalesItems.Sum(i => i.Quantity),
+                    RemainingStock = product.Stock,
+                    TotalSalesValue = productSalesItems.Sum(i => i.Subtotal),
+                    InventoryValue = product.Stock * product.CostPrice
+                });
+            }
+
+            var auditService = new AuditService();
+            string businessName = await _unitOfWork.Settings.GetValueAsync("BusinessName") ?? "Apliqx POS";
+            
+            var pdfBytes = auditService.GenerateStockAuditPdf(
+                auditItems.OrderByDescending(i => i.SoldQuantity),
+                businessName, 
+                SelectedPeriod,
+                StartDate,
+                EndDate);
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "PDF Files (*.pdf)|*.pdf",
+                FileName = $"StockAudit_{DateTime.Now:yyyyMMdd_HHmmss}.pdf",
+                Title = "حفظ تقرير الجرد"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                await File.WriteAllBytesAsync(saveFileDialog.FileName, pdfBytes);
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = saveFileDialog.FileName,
+                    UseShellExecute = true
+                });
+            }
+        }
+        catch (Exception)
+        {
+            // Error handling
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     public void Receive(ViewSwitchedMessage message)

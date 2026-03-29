@@ -91,7 +91,7 @@ public partial class InventoryViewModel : ObservableObject
             {
                 products = await _unitOfWork.Products.GetLowStockAsync();
             }
-            else if (SelectedCategory != null)
+            else if (SelectedCategory != null && SelectedCategory.Id != 0)
             {
                 products = await _unitOfWork.Products.GetByCategoryAsync(SelectedCategory.Id);
             }
@@ -103,8 +103,25 @@ public partial class InventoryViewModel : ObservableObject
             Products = new ObservableCollection<Product>(products.Where(p => p.IsActive));
 
             // Load categories
-            var categories = await _unitOfWork.Categories.GetAllAsync();
-            Categories = new ObservableCollection<Category>(categories.Where(c => c.IsActive));
+            var dbCategories = await _unitOfWork.Categories.GetAllAsync();
+            var activeCategories = dbCategories.Where(c => c.IsActive).ToList();
+            
+            // Add "All" category at the beginning
+            var allCategory = new Category 
+            { 
+                Id = 0, 
+                Name = Localization.GetString("Action_All") ?? "All",
+                NameAr = "الكل" 
+            };
+            
+            activeCategories.Insert(0, allCategory);
+            Categories = new ObservableCollection<Category>(activeCategories);
+
+            // Default select "All" if nothing selected
+            if (SelectedCategory == null)
+            {
+                SelectedCategory = allCategory;
+            }
 
             // Calculate stats
             await CalculateStatsAsync();
@@ -113,6 +130,11 @@ public partial class InventoryViewModel : ObservableObject
         {
             IsLoading = false;
         }
+    }
+
+    partial void OnSelectedCategoryChanged(Category? value)
+    {
+        FilterByCategoryCommand.Execute(null);
     }
 
     private async Task CalculateStatsAsync()
