@@ -15,6 +15,7 @@ public interface IProductRepository : IRepository<Product>
     Task<IEnumerable<Product>> GetOutOfStockAsync();
     Task<IEnumerable<Product>> SearchAsync(string searchTerm);
     Task UpdateStockAsync(int productId, decimal quantity);
+    Task<decimal> GetTotalInventoryValueAsync();
 }
 
 public class ProductRepository : Repository<Product>, IProductRepository
@@ -24,6 +25,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     public async Task<IEnumerable<Product>> GetByCategoryAsync(int categoryId)
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(p => p.CategoryId == categoryId)
             .Include(p => p.Category)
             .ToListAsync();
@@ -39,6 +41,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     public async Task<IEnumerable<Product>> GetLowStockAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(p => p.Stock <= p.MinStock && p.Stock > 0)
             .Include(p => p.Category)
             .ToListAsync();
@@ -47,6 +50,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     public async Task<IEnumerable<Product>> GetOutOfStockAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(p => p.Stock <= 0)
             .Include(p => p.Category)
             .ToListAsync();
@@ -56,6 +60,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     {
         var term = searchTerm.ToLower();
         return await _dbSet
+            .AsNoTracking()
             .Where(p => p.Name.ToLower().Contains(term) || 
                        (p.Barcode != null && p.Barcode.Contains(term)))
             .Include(p => p.Category)
@@ -75,8 +80,18 @@ public class ProductRepository : Repository<Product>, IProductRepository
     public override async Task<IEnumerable<Product>> GetAllAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .Include(p => p.Category)
             .OrderBy(p => p.Name)
             .ToListAsync();
+    }
+
+    public async Task<decimal> GetTotalInventoryValueAsync()
+    {
+        // Calculate total value on the database side for performance
+        // Only count positive stock to avoid negative stock offsetting the value
+        return await _dbSet
+            .Where(p => p.IsActive && p.Stock > 0)
+            .SumAsync(p => p.Stock * p.CostPrice);
     }
 }

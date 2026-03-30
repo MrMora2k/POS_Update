@@ -25,6 +25,7 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
     public async Task<IEnumerable<Sale>> GetByCustomerAsync(int customerId)
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(s => s.CustomerId == customerId)
             .Include(s => s.Items)
             .ThenInclude(i => i.Product)
@@ -35,6 +36,7 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
     public async Task<IEnumerable<Sale>> GetByDateRangeAsync(DateTime start, DateTime end)
     {
         return await _dbSet
+            .AsNoTracking()
             .Where(s => s.SaleDate >= start && s.SaleDate <= end)
             .Include(s => s.Customer)
             .Include(s => s.Items)
@@ -70,15 +72,17 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
 
     public async Task<decimal> GetTotalProfitAsync(DateTime start, DateTime end)
     {
-        var sales = await _dbSet
+        // Optimized calculation using DB projection to avoid pulling all data into memory
+        var itemProfit = await _dbSet
             .Where(s => s.SaleDate >= start && s.SaleDate <= end && s.Status != SaleStatus.Cancelled)
-            .Include(s => s.Items)
-            .ThenInclude(i => i.Product)
-            .ToListAsync();
+            .SelectMany(s => s.Items)
+            .SumAsync(i => (i.UnitPrice - i.Product!.CostPrice) * i.Quantity - i.Discount);
 
-        return sales.Sum(s => 
-            s.Items.Sum(i => (i.UnitPrice - i.Product.CostPrice) * i.Quantity - i.Discount) 
-            - s.DiscountAmount);
+        var totalDiscounts = await _dbSet
+            .Where(s => s.SaleDate >= start && s.SaleDate <= end && s.Status != SaleStatus.Cancelled)
+            .SumAsync(s => s.DiscountAmount);
+
+        return itemProfit - totalDiscounts;
     }
 
     public async Task<int> GetSalesCountAsync(DateTime start, DateTime end)
@@ -91,6 +95,7 @@ public class SaleRepository : Repository<Sale>, ISaleRepository
     public override async Task<IEnumerable<Sale>> GetAllAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .Include(s => s.Customer)
             .Include(s => s.Items)
             .OrderByDescending(s => s.SaleDate)

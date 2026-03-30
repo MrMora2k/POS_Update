@@ -11,9 +11,9 @@
     <NoWarn>$(NoWarn);NU1701</NoWarn>
     <ApplicationIcon>cashier (2).ico</ApplicationIcon>
     <!-- App Version - increment this before each GitHub Release -->
-    <Version>1.4.0</Version>
-    <AssemblyVersion>1.4.0</AssemblyVersion>
-    <FileVersion>1.4.0</FileVersion>
+    <Version>1.4.1</Version>
+    <AssemblyVersion>1.4.1</AssemblyVersion>
+    <FileVersion>1.4.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

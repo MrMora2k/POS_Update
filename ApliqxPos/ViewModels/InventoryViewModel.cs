@@ -139,13 +139,11 @@ public partial class InventoryViewModel : ObservableObject
 
     private async Task CalculateStatsAsync()
     {
-        var allProducts = await _unitOfWork.Products.GetAllAsync();
-        var activeProducts = allProducts.Where(p => p.IsActive).ToList();
-
-        TotalProducts = activeProducts.Count;
-        LowStockCount = activeProducts.Count(p => p.Stock > 0 && p.Stock <= p.MinStock);
-        OutOfStockCount = activeProducts.Count(p => p.Stock <= 0);
-        TotalInventoryValue = activeProducts.Sum(p => p.Stock * p.CostPrice);
+        // Calculate stats on the database side for best performance
+        TotalProducts = await _unitOfWork.Products.CountAsync(p => p.IsActive);
+        LowStockCount = await _unitOfWork.Products.CountAsync(p => p.IsActive && p.Stock > 0 && p.Stock <= p.MinStock);
+        OutOfStockCount = await _unitOfWork.Products.CountAsync(p => p.IsActive && p.Stock <= 0);
+        TotalInventoryValue = await _unitOfWork.Products.GetTotalInventoryValueAsync();
     }
 
     [RelayCommand]

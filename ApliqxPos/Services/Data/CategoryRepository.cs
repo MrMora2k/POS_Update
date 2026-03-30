@@ -20,6 +20,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
     public async Task<Category?> GetWithProductsAsync(int categoryId)
     {
         return await _dbSet
+            .AsNoTracking()
             .Include(c => c.Products)
             .FirstOrDefaultAsync(c => c.Id == categoryId);
     }
@@ -27,6 +28,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
     public async Task<IEnumerable<Category>> GetCategoriesWithProductCountAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .Include(c => c.Products)
             .OrderBy(c => c.Name)
             .ToListAsync();
@@ -35,6 +37,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
     public override async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .OrderBy(c => c.Name)
             .ToListAsync();
     }

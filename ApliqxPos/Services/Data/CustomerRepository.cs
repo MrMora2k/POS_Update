@@ -23,6 +23,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
     public async Task<IEnumerable<Customer>> GetCustomersWithDebtAsync()
     {
         var customers = await _dbSet
+            .AsNoTracking()
             .Where(c => c.CurrentDebt > 0 || c.Sales.Any(s => s.TotalAmount - s.DiscountAmount > s.PaidAmount))
             .ToListAsync();
             
@@ -33,6 +34,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
         var term = searchTerm.ToLower();
         return await _dbSet
+            .AsNoTracking()
             .Where(c => c.Name.ToLower().Contains(term) || 
                        (c.Phone != null && c.Phone.Contains(term)))
             .OrderBy(c => c.Name)
@@ -41,7 +43,9 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
 
     public async Task<Customer?> GetByPhoneAsync(string phone)
     {
-        return await _dbSet.FirstOrDefaultAsync(c => c.Phone == phone);
+        return await _dbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Phone == phone);
     }
 
     public async Task<decimal> GetTotalDebtAsync(int customerId)
@@ -63,6 +67,7 @@ public class CustomerRepository : Repository<Customer>, ICustomerRepository
     public override async Task<IEnumerable<Customer>> GetAllAsync()
     {
         return await _dbSet
+            .AsNoTracking()
             .OrderBy(c => c.Name)
             .ToListAsync();
     }
